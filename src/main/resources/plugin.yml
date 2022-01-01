@@ -1,0 +1,4 @@
+name: CashMF
+version: '@version@'
+main: net.teamuni.cashmf.CashMF
+api-version: 1.18
