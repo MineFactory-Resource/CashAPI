@@ -21,7 +21,7 @@ public class PlayerConf extends Frame{
 
     // 플레이어의 캐시 정보를 player.conf 파일에 저장
     public void save() {
-        for (Cash cash: Cash.cashs) {
+        for (Cash cash: Cash.cashes.values()) {
             config.set(cash.getUUID().toString(), cash.getCash());
         }
 

@@ -164,13 +164,13 @@ public class CashExecutor implements CommandExecutor {
 
         // 플레이어의 캐시를 차감
         player1.addCash(-amount);
-        sender.sendMessage("%p님에게 ".replace("%p", Bukkit.getPlayer(player2.getUUID()).getName()) + amount + "캐시를 보냈습니다.");
+        sender.sendMessage(Bukkit.getPlayer(player2.getUUID()).getName() + "님에게 " + amount + " 캐시를 보냈습니다.");
 
         // 대상에게 차감된 캐시만큼 전송
         player2.addCash(amount);
         // 플레이어가 온라인일 경우
         if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(player2.getUUID()))) {
-            Bukkit.getPlayer(player2.getUUID()).sendMessage("%p님에게 ".replace("%p", Bukkit.getPlayer(player1.getUUID()).getName()) + amount + "캐시를 받았습니다.");
+            Bukkit.getPlayer(player2.getUUID()).sendMessage(Bukkit.getPlayer(player1.getUUID()).getName() + "님에게 " + amount + " 캐시를 받았습니다.");
         }
     }
 
@@ -194,12 +194,12 @@ public class CashExecutor implements CommandExecutor {
             case 0:
                 // 대상에게 캐시 지급
                 player.addCash(amount);
-                sender.sendMessage("%p님에게 ".replace("%p", Bukkit.getPlayer(player.getUUID()).getName()) + amount + "캐시를 지급하였습니다.");
+                sender.sendMessage(Bukkit.getPlayer(player.getUUID()).getName() + "님에게 " + amount + " 캐시를 지급하였습니다.");
                 break;
             case 1:
                 // 대상의 캐시 차감
                 player.addCash(-amount);
-                sender.sendMessage("%p님에게서 ".replace("%p", Bukkit.getPlayer(player.getUUID()).getName()) + amount + "캐시를 차감하였습니다.");
+                sender.sendMessage(Bukkit.getPlayer(player.getUUID()).getName() + "님에게서 " + amount + " 캐시를 차감하였습니다.");
         }
     }
 
