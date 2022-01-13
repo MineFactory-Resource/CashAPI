@@ -2,12 +2,14 @@ package net.teamuni.cashmf;
 
 import net.teamuni.cashmf.command.CashExecutor;
 import net.teamuni.cashmf.command.CashTabCompleter;
+import net.teamuni.cashmf.config.MessageConf;
 import net.teamuni.cashmf.config.PlayerConf;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CashMF extends JavaPlugin {
     private static CashMF instance;
     private static PlayerConf playerConf;
+    private static MessageConf messageConf;
 
     @Override
     public void onEnable() {
@@ -15,6 +17,8 @@ public final class CashMF extends JavaPlugin {
 
         // *.yml 파일 셋업
         playerConf = new PlayerConf();
+        messageConf = new MessageConf();
+
 
         getServer().getPluginManager().registerEvents(new FirstJoin(), this);
         this.getCommand("캐시").setExecutor(new CashExecutor());
@@ -33,5 +37,9 @@ public final class CashMF extends JavaPlugin {
 
     public static PlayerConf getPlayerConf() {
         return playerConf;
+    }
+
+    public static MessageConf getMessageConf() {
+        return messageConf;
     }
 }
