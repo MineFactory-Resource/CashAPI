@@ -37,15 +37,10 @@ public class Cash {
 
     // 해당 uuid의 Cash 정보 가져오기
     public static Cash getCash(UUID uuid) {
-        if (Cash.contains(uuid))
+        if (cashes.containsKey(uuid))
             return cashes.get(uuid);
 
         return null;
-    }
-
-    // 해당 uuid가 존재하는지 확인
-    public static boolean contains(UUID uuid) {
-        return cashes.containsKey(uuid);
     }
 
     // uuid 정보들을 저장

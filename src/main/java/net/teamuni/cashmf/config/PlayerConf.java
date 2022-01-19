@@ -38,6 +38,10 @@ public class PlayerConf extends Frame{
     // 플레이어의 캐시정보를 player.conf 파일에서 불러오기
     public void getPlayers() {
         for (String s : config.getKeys(false)) {
+            // 잘못된 uuid 형식일 경우 무시
+            if (s.length()!=36)
+                return;
+
             new Cash(UUID.fromString(s), config.getInt(s));
         }
     }

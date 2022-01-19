@@ -47,7 +47,7 @@ public class CashExecutor implements CommandExecutor {
             // /캐시 확인 <플레이어>
             } else {
                 try {
-                    UUID uuid = Bukkit.getPlayer(args[1]).getUniqueId();
+                    UUID uuid = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
                     look(sender, uuid);
 
                 // 플레이어의 정보를 불러올 수 없는 경우
@@ -107,7 +107,7 @@ public class CashExecutor implements CommandExecutor {
         if (cash != null) {
             int point = cash.getCash();
             sender.sendMessage(getMessageConf().getMessage("look_cash")
-                    .replace("%player%", Bukkit.getPlayer(uuid).getName())
+                    .replace("%player%", Bukkit.getOfflinePlayer(uuid).getName())
                     .replace("%cash%", String.valueOf(point))
             );
         // 플레이어를 확인할 수 없는 경우
@@ -209,7 +209,7 @@ public class CashExecutor implements CommandExecutor {
                     return;
                 }
 
-                UUID uuid = Bukkit.getPlayer(args[1]).getUniqueId();
+                UUID uuid = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
                 Cash target = Cash.getCash(uuid);
 
                 // 대상이 존재하지 않는 플레이어일 경우
