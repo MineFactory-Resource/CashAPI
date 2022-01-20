@@ -3,6 +3,7 @@ package net.teamuni.cashmf.command;
 import static net.teamuni.cashmf.CashMF.getMessageConf;
 import net.teamuni.cashmf.Cash;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,13 +47,28 @@ public class CashExecutor implements CommandExecutor {
 
             // /캐시 확인 <플레이어>
             } else {
-                try {
-                    UUID uuid = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
-                    look(sender, uuid);
+                if (sender instanceof Player && args[1].equalsIgnoreCase(sender.getName())) {
+                    look(sender);
+                } else {
+                    try {
+                        OfflinePlayer player = null;
+                        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+                            if (args[1].equalsIgnoreCase(p.getName())) {
+                                player = p;
+                                break;
+                            }
+                        }
 
-                // 플레이어의 정보를 불러올 수 없는 경우
-                } catch (NullPointerException e) {
-                    sender.sendMessage(getMessageConf().getMessage("exist_player"));
+                        if (player == null) {
+                            sender.sendMessage(getMessageConf().getMessage("exist_player"));
+                            return true;
+                        }
+                            look(sender, player);
+
+                        // 플레이어의 정보를 불러올 수 없는 경우
+                    } catch (NullPointerException e) {
+                        sender.sendMessage(getMessageConf().getMessage("exist_player"));
+                    }
                 }
             }
 
@@ -94,20 +110,27 @@ public class CashExecutor implements CommandExecutor {
     private void look(CommandSender sender) {
         // 플레이어가 자신의 캐시를 확인할 경우
         if (sender instanceof Player) {
-            look(sender, ((Player)sender).getUniqueId());
+            Player player = (Player)sender;
+            Cash cash = Cash.getCash(player.getUniqueId());
+
+            int point = cash.getCash();
+            sender.sendMessage(getMessageConf().getMessage("look_cash")
+                    .replace("%player%", player.getName())
+                    .replace("%cash%", String.valueOf(point))
+            );
         // 플레이어가 아닌 경우
         } else {
             sender.sendMessage(getMessageConf().getMessage("use_console"));
         }
     }
 
-    private void look (CommandSender sender, UUID uuid) {
-        Cash cash = Cash.getCash(uuid);
+    private void look (CommandSender sender, OfflinePlayer player) {
+        Cash cash = Cash.getCash(player.getUniqueId());
         // 플레이어를 확인했을 경우
         if (cash != null) {
             int point = cash.getCash();
             sender.sendMessage(getMessageConf().getMessage("look_cash")
-                    .replace("%player%", Bukkit.getOfflinePlayer(uuid).getName())
+                    .replace("%player%", player.getName())
                     .replace("%cash%", String.valueOf(point))
             );
         // 플레이어를 확인할 수 없는 경우
@@ -153,19 +176,20 @@ public class CashExecutor implements CommandExecutor {
             return;
         }
 
+        OfflinePlayer p2 = Bukkit.getOfflinePlayer(player2.getUUID());
         // 플레이어의 캐시를 차감
         player1.addCash(-amount);
         sender.sendMessage(getMessageConf().getMessage("send_cash")
-                .replace("%player%", Bukkit.getPlayer(player2.getUUID()).getName())
+                .replace("%player%", p2.getName())
                 .replace("%amount%", String.valueOf(amount))
         );
 
         // 대상에게 차감된 캐시만큼 전송
         player2.addCash(amount);
         // 플레이어가 온라인일 경우
-        if (Bukkit.getOnlinePlayers().contains(Bukkit.getPlayer(player2.getUUID()))) {
-            Bukkit.getPlayer(player2.getUUID()).sendMessage(getMessageConf().getMessage("receive_cash")
-                    .replace("%player%", Bukkit.getPlayer(player2.getUUID()).getName())
+        if (p2.isOnline()) {
+            p2.getPlayer().sendMessage(getMessageConf().getMessage("receive_cash")
+                    .replace("%player%", sender.getName())
                     .replace("%amount%", String.valueOf(amount))
             );
         }
@@ -173,12 +197,13 @@ public class CashExecutor implements CommandExecutor {
 
     // 플레이어에게 캐시 지급하기
     private void edit(CommandSender sender, Cash player, int amount, int type) {
+        String name = Bukkit.getOfflinePlayer(player.getUUID()).getName();
         switch (type) {
             case 0:
                 // 대상에게 캐시 지급
                 player.addCash(amount);
                 sender.sendMessage(getMessageConf().getMessage("add_cash")
-                        .replace("%player%", Bukkit.getPlayer(player.getUUID()).getName())
+                        .replace("%player%", name)
                         .replace("%amount%", String.valueOf(amount))
                 );
                 break;
@@ -186,7 +211,7 @@ public class CashExecutor implements CommandExecutor {
                 // 대상의 캐시 차감
                 player.addCash(-amount);
                 sender.sendMessage(getMessageConf().getMessage("sub_cash")
-                        .replace("%player%", Bukkit.getPlayer(player.getUUID()).getName())
+                        .replace("%player%", name)
                         .replace("%amount%", String.valueOf(amount))
                 );
         }
@@ -209,13 +234,17 @@ public class CashExecutor implements CommandExecutor {
                     return;
                 }
 
-                UUID uuid = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
-                Cash target = Cash.getCash(uuid);
+                OfflinePlayer player = null;
+                for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+                    if (args[1].equalsIgnoreCase(p.getName())) {
+                        player = p;
+                        break;
+                    }
+                }
 
-                // 대상이 존재하지 않는 플레이어일 경우
+                Cash target = Cash.getCash(player.getUniqueId());
                 if (target == null) {
-                    sender.sendMessage(getMessageConf().getMessage("exist_player"));
-                    return;
+                    throw new NullPointerException();
                 }
 
                 switch (type) {
