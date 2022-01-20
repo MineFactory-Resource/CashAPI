@@ -4,6 +4,7 @@ import static net.teamuni.cashmf.CashMF.getPlayerConf;
 import java.util.*;
 
 public class Cash {
+    public static final String UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
     public static HashMap<UUID, Cash> cashes = new HashMap<>();
 
     private final UUID uuid;

@@ -6,6 +6,7 @@ import static net.teamuni.cashmf.CashMF.getInstance;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 public class PlayerConf extends Frame{
     public PlayerConf() {
@@ -39,7 +40,7 @@ public class PlayerConf extends Frame{
     public void getPlayers() {
         for (String s : config.getKeys(false)) {
             // 잘못된 uuid 형식일 경우 무시
-            if (s.length()!=36)
+            if (!Pattern.matches(Cash.UUID_PATTERN, s))
                 return;
 
             new Cash(UUID.fromString(s), config.getInt(s));
