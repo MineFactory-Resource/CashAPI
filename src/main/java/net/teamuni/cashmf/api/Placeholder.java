@@ -25,7 +25,8 @@ public class Placeholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String params) {
         if(params.equalsIgnoreCase("cash")){
             Cash cash = Cash.getCash(player.getUniqueId());
-            return String.valueOf(cash.getCash());
+            if (cash != null)
+                return String.valueOf(cash.getCash());
         }
 
         return null;

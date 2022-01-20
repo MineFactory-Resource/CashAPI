@@ -17,7 +17,8 @@ public class Cash {
         this.uuid = uuid;
         this.cash = cash;
 
-        cashes.put(this.uuid, this);
+        if (uuid != null)
+            cashes.put(this.uuid, this);
     }
 
     // uuid 값 가져오기
