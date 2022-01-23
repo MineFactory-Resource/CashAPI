@@ -4,6 +4,7 @@ import static net.teamuni.cashmf.CashMF.getPlayerConf;
 import java.util.*;
 
 public class Cash {
+    public static final String UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
     public static HashMap<UUID, Cash> cashes = new HashMap<>();
 
     private final UUID uuid;
@@ -17,7 +18,8 @@ public class Cash {
         this.uuid = uuid;
         this.cash = cash;
 
-        cashes.put(this.uuid, this);
+        if (uuid != null)
+            cashes.put(this.uuid, this);
     }
 
     // uuid 값 가져오기
@@ -37,15 +39,10 @@ public class Cash {
 
     // 해당 uuid의 Cash 정보 가져오기
     public static Cash getCash(UUID uuid) {
-        if (Cash.contains(uuid))
+        if (cashes.containsKey(uuid))
             return cashes.get(uuid);
 
         return null;
-    }
-
-    // 해당 uuid가 존재하는지 확인
-    public static boolean contains(UUID uuid) {
-        return cashes.containsKey(uuid);
     }
 
     // uuid 정보들을 저장
