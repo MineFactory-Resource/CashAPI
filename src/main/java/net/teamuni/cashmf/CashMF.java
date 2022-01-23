@@ -1,5 +1,7 @@
 package net.teamuni.cashmf;
 
+import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAddon;
 import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.command.CashExecutor;
 import net.teamuni.cashmf.command.CashTabCompleter;
@@ -8,10 +10,14 @@ import net.teamuni.cashmf.config.PlayerConf;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public class CashMF extends JavaPlugin {
     private static CashMF instance;
     private static PlayerConf playerConf;
     private static MessageConf messageConf;
+
+    private SkriptAddon addon;
 
     @Override
     public void onEnable() {
@@ -34,6 +40,17 @@ public class CashMF extends JavaPlugin {
         } else {
             getLogger().info("PlaceholderAPI 플러그인이 발견되지 않았습니다.");
         }
+        if (Bukkit.getPluginManager().getPlugin("Skript") != null) {
+            try {
+                addon = Skript.registerAddon(this)
+                        .loadClasses("net.teamuni.cashmf.api.skript","elements");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            getLogger().info("Skript 플러그인이 발견되지 않았습니다.");
+
+        }
 
     }
 
@@ -52,5 +69,9 @@ public class CashMF extends JavaPlugin {
 
     public static MessageConf getMessageConf() {
         return messageConf;
+    }
+
+    public SkriptAddon getAddonInstnace() {
+        return addon;
     }
 }
