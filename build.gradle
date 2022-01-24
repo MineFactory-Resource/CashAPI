@@ -16,11 +16,15 @@ repositories {
     maven {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
+    maven {
+        url 'https://repo.skriptlang.org/releases'
+    }
 }
 
 dependencies {
     compileOnly spigot("1.18.1-R0.1-SNAPSHOT")
     compileOnly 'me.clip:placeholderapi:2.11.1'
+    compileOnly 'com.github.SkriptLang:Skript:2.6'
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -45,8 +49,8 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 spigot {
-    softDepends 'PlaceholderAPI'
-    apiVersion '1.18'
+    softDepends = ['PlaceholderAPI', 'Skript']
+    apiVersion '1.13'
     commands {
         캐시 {
             usage '/<command>'
