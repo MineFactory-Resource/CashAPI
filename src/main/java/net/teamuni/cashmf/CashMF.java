@@ -2,9 +2,11 @@ package net.teamuni.cashmf;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import net.teamuni.cashmf.api.database.SQL;
 import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.command.CashExecutor;
 import net.teamuni.cashmf.command.CashTabCompleter;
+import net.teamuni.cashmf.config.Conf;
 import net.teamuni.cashmf.config.MessageConf;
 import net.teamuni.cashmf.config.PlayerConf;
 import org.bukkit.Bukkit;
@@ -14,8 +16,12 @@ import java.io.IOException;
 
 public class CashMF extends JavaPlugin {
     private static CashMF instance;
-    private static PlayerConf playerConf;
+
+    private static Conf conf;
     private static MessageConf messageConf;
+
+    private static PlayerConf playerConf;
+    private static SQL sql;
 
     private SkriptAddon addon;
 
@@ -24,8 +30,17 @@ public class CashMF extends JavaPlugin {
         instance = this;
 
         // *.yml 파일 설정
-        playerConf = new PlayerConf();
         messageConf = new MessageConf();
+        conf = new Conf();
+
+        // 데이터 저장 방식 설정
+        if (conf.database.get("type").equalsIgnoreCase("yaml")) {
+            playerConf = new PlayerConf();
+
+        } else {
+            sql = new SQL();
+        }
+
 
         // 이벤트 설정
         getServer().getPluginManager().registerEvents(new FirstJoin(), this);
@@ -69,6 +84,14 @@ public class CashMF extends JavaPlugin {
 
     public static MessageConf getMessageConf() {
         return messageConf;
+    }
+
+    public static Conf getConf() {
+        return conf;
+    }
+
+    public static SQL getSQL() {
+        return sql;
     }
 
     public SkriptAddon getAddonInstnace() {

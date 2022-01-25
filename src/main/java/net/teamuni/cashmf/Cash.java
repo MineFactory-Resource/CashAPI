@@ -1,11 +1,13 @@
 package net.teamuni.cashmf;
 
 import static net.teamuni.cashmf.CashMF.getPlayerConf;
+import static net.teamuni.cashmf.CashMF.getConf;
+import static net.teamuni.cashmf.CashMF.getSQL;
 import java.util.*;
 
 public class Cash {
     public static final String UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
-    public static HashMap<UUID, Cash> cashes = new HashMap<>();
+    public static HashMap<UUID, Cash> cashes;
 
     private final UUID uuid;
     private int cash;
@@ -35,6 +37,10 @@ public class Cash {
     // cash 값 더하기
     public void addCash(int add) {
         cash += add;
+
+        // 플레이어의 캐시가 0보다 적어질 경우 0으로 설정
+        if (cash < 0)
+            cash = 0;
     }
 
     // 해당 uuid의 Cash 정보 가져오기
@@ -47,6 +53,10 @@ public class Cash {
 
     // uuid 정보들을 저장
     public static void save() {
-        getPlayerConf().save();
+        if (getConf().database.get("type").equals("yaml")) {
+            getPlayerConf().save();
+        } else {
+            getSQL().save();
+        }
     }
 }

@@ -4,6 +4,7 @@ import net.teamuni.cashmf.Cash;
 
 import static net.teamuni.cashmf.CashMF.getInstance;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -38,14 +39,15 @@ public class PlayerConf extends Frame{
 
     // 플레이어의 캐시정보를 player.conf 파일에서 불러오기
     public void getPlayers() {
+        // Cash 데이터 초기화
+        Cash.cashes = new HashMap<>();
+
         for (String s : config.getKeys(false)) {
             // 잘못된 uuid 형식일 경우 무시
             if (!Pattern.matches(Cash.UUID_PATTERN, s))
-                return;
+                continue;
 
             new Cash(UUID.fromString(s), config.getInt(s));
         }
     }
-
-
 }

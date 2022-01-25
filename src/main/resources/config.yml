@@ -1,0 +1,11 @@
+# Database 사용 여부
+# Database type: Yaml, MySQL, MariaDB, PostgreSQL, SQLite
+# yaml의 경우 players.yml 파일로 적용됨
+
+database:
+  type: "yaml"
+  host: "localhost:3306"
+  database_name: ""
+  table: "CashMF"
+  username: ""
+  password: ""

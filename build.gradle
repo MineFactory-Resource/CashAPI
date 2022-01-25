@@ -17,7 +17,7 @@ repositories {
         url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
     }
     maven {
-        url 'https://repo.skriptlang.org/releases'
+        url = 'https://repo.skriptlang.org/releases'
     }
 }
 
@@ -25,6 +25,7 @@ dependencies {
     compileOnly spigot("1.18.1-R0.1-SNAPSHOT")
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly 'com.github.SkriptLang:Skript:2.6'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
 }
 
 compileJava.options.encoding = 'UTF-8'
