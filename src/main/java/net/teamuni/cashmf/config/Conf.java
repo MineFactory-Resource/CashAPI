@@ -26,7 +26,9 @@ public class Conf extends Frame{
             database = db;
             return;
         }
-        db.put("host", config.getString("database.host"));
+
+        db.put("address", config.getString("database.address"));
+        db.put("port", config.getString("database.port"));
         db.put("database_name", config.getString("database.database_name"));
         db.put("table", config.getString("database.table"));
         db.put("username", config.getString("database.username"));

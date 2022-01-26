@@ -25,7 +25,8 @@ public class SQL {
         HikariConfig config = new HikariConfig();
 
         String url = "jdbc:" + getConf().database.get("type") + "://"
-                + getConf().database.get("host") + "/"
+                + getConf().database.get("address") + ":"
+                + getConf().database.get("port") + "/"
                 + getConf().database.get("database_name") + "?characterEncoding=utf8&useSSL=false";
 
         config.setJdbcUrl(url);

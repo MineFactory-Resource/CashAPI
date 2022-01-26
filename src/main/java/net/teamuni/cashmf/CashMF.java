@@ -2,6 +2,7 @@ package net.teamuni.cashmf;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import net.teamuni.cashmf.api.database.MongoDB;
 import net.teamuni.cashmf.api.database.SQL;
 import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.command.CashExecutor;
@@ -22,6 +23,7 @@ public class CashMF extends JavaPlugin {
 
     private static PlayerConf playerConf;
     private static SQL sql;
+    private static MongoDB mongoDB;
 
     private SkriptAddon addon;
 
@@ -34,8 +36,11 @@ public class CashMF extends JavaPlugin {
         conf = new Conf();
 
         // 데이터 저장 방식 설정
-        if (conf.database.get("type").equalsIgnoreCase("yaml")) {
+        if (conf.database.get("type").equals("yaml")) {
             playerConf = new PlayerConf();
+
+        } else if (conf.database.get("type").equals("mongodb")) {
+            mongoDB = new MongoDB();
 
         } else {
             sql = new SQL();
@@ -92,6 +97,10 @@ public class CashMF extends JavaPlugin {
 
     public static SQL getSQL() {
         return sql;
+    }
+
+    public static MongoDB getMongoDB() {
+        return mongoDB;
     }
 
     public SkriptAddon getAddonInstnace() {

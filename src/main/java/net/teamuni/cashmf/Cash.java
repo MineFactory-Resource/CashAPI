@@ -1,9 +1,8 @@
 package net.teamuni.cashmf;
 
-import static net.teamuni.cashmf.CashMF.getPlayerConf;
-import static net.teamuni.cashmf.CashMF.getConf;
-import static net.teamuni.cashmf.CashMF.getSQL;
 import java.util.*;
+
+import static net.teamuni.cashmf.CashMF.*;
 
 public class Cash {
     public static final String UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
@@ -55,6 +54,10 @@ public class Cash {
     public static void save() {
         if (getConf().database.get("type").equals("yaml")) {
             getPlayerConf().save();
+
+        } else if (getConf().database.get("type").equals("mongodb")) {
+            getMongoDB().save();
+
         } else {
             getSQL().save();
         }
