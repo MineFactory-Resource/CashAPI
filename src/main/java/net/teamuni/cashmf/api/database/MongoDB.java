@@ -13,7 +13,7 @@ import org.bson.Document;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class MongoDB {
+public class MongoDB implements Database {
     private final MongoClientURI uri;
 
     public MongoDB() {
@@ -28,6 +28,7 @@ public class MongoDB {
     }
 
     // 콜렉션에서 데이터 불러오기
+    @Override
     public void load() {
         try (MongoClient client = new MongoClient(uri)) {
             MongoDatabase db = client.getDatabase(getConf().database.get("database_name"));
@@ -48,6 +49,7 @@ public class MongoDB {
     }
 
     // 콜렉션에 데이터 저장
+    @Override
     public void save() {
         try (MongoClient client = new MongoClient(uri)) {
             MongoDatabase db = client.getDatabase(getConf().database.get("database_name"));

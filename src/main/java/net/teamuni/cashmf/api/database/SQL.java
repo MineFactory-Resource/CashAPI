@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class SQL {
+public class SQL implements Database {
     private final HikariDataSource ds;
 
     private final String CREATE;
@@ -67,6 +67,7 @@ public class SQL {
     }
 
     // 테이블에서 데이터 불러오기
+    @Override
     public void load() {
         // Cash 데이터 초기화
         Cash.cashes = new HashMap<>();
@@ -98,6 +99,7 @@ public class SQL {
     }
 
     // 테이블에 데이터 저장
+    @Override
     public void save() {
         checkTable();
 

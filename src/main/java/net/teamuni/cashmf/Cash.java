@@ -2,7 +2,7 @@ package net.teamuni.cashmf;
 
 import java.util.*;
 
-import static net.teamuni.cashmf.CashMF.*;
+import static net.teamuni.cashmf.CashMF.getDatabase;
 
 public class Cash {
     public static final String UUID_PATTERN = "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}";
@@ -52,14 +52,6 @@ public class Cash {
 
     // uuid 정보들을 저장
     public static void save() {
-        if (getConf().database.get("type").equals("yaml")) {
-            getPlayerConf().save();
-
-        } else if (getConf().database.get("type").equals("mongodb")) {
-            getMongoDB().save();
-
-        } else {
-            getSQL().save();
-        }
+        getDatabase().save();
     }
 }
