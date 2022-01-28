@@ -18,8 +18,7 @@ public class SQL implements Database {
 
     private final String CREATE;
     private final String SELECT;
-    private final String INSERT;
-    private final String UPDATE;
+    private final String UPSERT;
 
     public SQL() {
         HikariConfig config = new HikariConfig();
@@ -39,9 +38,8 @@ public class SQL implements Database {
                 + "`uuid` VARCHAR(36) PRIMARY KEY,"
                 + "`cash` MEDIUMINT UNSIGNED NOT NULL"
                 + ");";
-        SELECT = "SELECT %s FROM `" + getConf().database.get("table") + "`;";
-        INSERT = "INSERT INTO `" + getConf().database.get("table") + "` (`uuid`, `cash`) VALUES ('%1$s', '%2$s');";
-        UPDATE = "UPDATE `" + getConf().database.get("table") + "` SET `cash` = %2$s WHERE `uuid` = '%1$s';";
+        SELECT = "SELECT * FROM `" + getConf().database.get("table") + "`;";
+        UPSERT = "INSERT INTO `" + getConf().database.get("table") + "` (`uuid`, `cash`) VALUES ('%1$s', '%2$s') ON DUPLICATE KEY UPDATE `cash` = '%2$s';";
 
         load();
     }
@@ -76,7 +74,7 @@ public class SQL implements Database {
 
         try (Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(String.format(SELECT, "*"))) {
+             ResultSet rs = stmt.executeQuery(SELECT)) {
             while (rs.next()) {
                 // 잘못된 uuid 형식일 경우 무시
                 if (!Pattern.matches(Cash.UUID_PATTERN, rs.getString("uuid")))
@@ -104,27 +102,12 @@ public class SQL implements Database {
         checkTable();
 
         try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(String.format(SELECT, "uuid"))) {
-            List<UUID> uuids = new ArrayList<>();
-            while (rs.next()) {
-                // 잘못된 uuid 형식일 경우 무시
-                if (!Pattern.matches(Cash.UUID_PATTERN, rs.getString("uuid")))
-                    continue;
-
-                uuids.add(UUID.fromString(rs.getString("uuid")));
-            }
+             Statement stmt = conn.createStatement();) {
 
             for (Cash cash : Cash.cashes.values()) {
-                // 플레이어의 데이터가 테이블에 존재하는 경우 업데이트
-                if (uuids.contains(cash.getUUID())) {
-                    stmt.execute(String.format(UPDATE, cash.getUUID(), cash.getCash()));
-
-                // 플레이어의 데이터가 테이블에 존재하지 않을 경우 추가
-                } else {
-                    stmt.execute(String.format(INSERT, cash.getUUID(), cash.getCash()));
-                }
+                    stmt.execute(String.format(UPSERT, cash.getUUID(), cash.getCash()));
             }
+
         } catch (SQLSyntaxErrorException e) {
             getInstance().getLogger().warning("존재하지 않는 데이터베이스입니다.");
 
