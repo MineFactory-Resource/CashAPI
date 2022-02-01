@@ -2,9 +2,13 @@ package net.teamuni.cashmf;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import net.teamuni.cashmf.api.database.Database;
+import net.teamuni.cashmf.api.database.MongoDB;
+import net.teamuni.cashmf.api.database.SQL;
 import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.command.CashExecutor;
 import net.teamuni.cashmf.command.CashTabCompleter;
+import net.teamuni.cashmf.config.Conf;
 import net.teamuni.cashmf.config.MessageConf;
 import net.teamuni.cashmf.config.PlayerConf;
 import org.bukkit.Bukkit;
@@ -14,8 +18,11 @@ import java.io.IOException;
 
 public class CashMF extends JavaPlugin {
     private static CashMF instance;
-    private static PlayerConf playerConf;
+
+    private static Conf conf;
     private static MessageConf messageConf;
+
+    private static Database database;
 
     private SkriptAddon addon;
 
@@ -24,8 +31,20 @@ public class CashMF extends JavaPlugin {
         instance = this;
 
         // *.yml 파일 설정
-        playerConf = new PlayerConf();
         messageConf = new MessageConf();
+        conf = new Conf();
+
+        // 데이터 저장 방식 설정
+        if (conf.database.get("type").equals("yaml")) {
+            database = new PlayerConf();
+
+        } else if (conf.database.get("type").equals("mongodb")) {
+            database = new MongoDB();
+
+        } else {
+            database = new SQL();
+        }
+
 
         // 이벤트 설정
         getServer().getPluginManager().registerEvents(new FirstJoin(), this);
@@ -63,12 +82,16 @@ public class CashMF extends JavaPlugin {
         return instance;
     }
 
-    public static PlayerConf getPlayerConf() {
-        return playerConf;
-    }
-
     public static MessageConf getMessageConf() {
         return messageConf;
+    }
+
+    public static Conf getConf() {
+        return conf;
+    }
+
+    public static Database getDatabase() {
+        return database;
     }
 
     public SkriptAddon getAddonInstnace() {
