@@ -10,3 +10,8 @@ database:
   table: "CashMF"
   username: ""
   password: ""
+
+# Vault 플러그인 사용 여부
+# true로 할 경우 vault 플러그인의 경제 재화로 지정됩니다.
+# 기본: false
+vault: false
