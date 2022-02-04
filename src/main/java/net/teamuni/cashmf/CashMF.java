@@ -2,6 +2,8 @@ package net.teamuni.cashmf;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import net.milkbowl.vault.economy.Economy;
+import net.teamuni.cashmf.api.Vault;
 import net.teamuni.cashmf.api.database.Database;
 import net.teamuni.cashmf.api.database.MongoDB;
 import net.teamuni.cashmf.api.database.SQL;
@@ -12,6 +14,7 @@ import net.teamuni.cashmf.config.Conf;
 import net.teamuni.cashmf.config.MessageConf;
 import net.teamuni.cashmf.config.PlayerConf;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -35,13 +38,13 @@ public class CashMF extends JavaPlugin {
         conf = new Conf();
 
         // 데이터 저장 방식 설정
-        if (conf.database.get("type").equals("yaml")) {
+        if (conf.database.get("type").equals("yaml")) { // Yaml
             database = new PlayerConf();
 
-        } else if (conf.database.get("type").equals("mongodb")) {
+        } else if (conf.database.get("type").equals("mongodb")) { // MongoDB
             database = new MongoDB();
 
-        } else {
+        } else { // MariaDB, MySQL, SQLite, PostgreSQL
             database = new SQL();
         }
 
@@ -54,15 +57,15 @@ public class CashMF extends JavaPlugin {
         this.getCommand("캐시").setTabCompleter(new CashTabCompleter());
 
         // api 설정
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) { // PlaceholderAPI
             new Placeholder().register();
         } else {
             getLogger().info("PlaceholderAPI 플러그인이 발견되지 않았습니다.");
         }
-        if (Bukkit.getPluginManager().getPlugin("Skript") != null) {
+        if (Bukkit.getPluginManager().getPlugin("Skript") != null) { // Skript
             try {
                 addon = Skript.registerAddon(this)
-                        .loadClasses("net.teamuni.cashmf.api.skript","elements");
+                        .loadClasses("net.teamuni.cashmf.api.skript", "elements");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -70,7 +73,14 @@ public class CashMF extends JavaPlugin {
             getLogger().info("Skript 플러그인이 발견되지 않았습니다.");
 
         }
+        if (conf.vault) { // config.yml에서 vault 옵션이 true일 경우
+            if (Bukkit.getPluginManager().getPlugin("Vault") != null) { // Vault
+                Bukkit.getServicesManager().register(Economy.class, new Vault(), this, ServicePriority.Highest);
+            } else {
+                getLogger().info("Vault 플러그인이 발견되지 않았습니다.");
 
+            }
+        }
     }
 
     @Override

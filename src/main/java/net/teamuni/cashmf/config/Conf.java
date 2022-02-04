@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Conf extends Frame{
     public HashMap<String, String> database;
+    public boolean vault;
 
     public Conf() {
         super("config");
@@ -14,6 +15,8 @@ public class Conf extends Frame{
         super.load();
 
         getDatabase();
+
+        getVault();
     }
 
     public void getDatabase() {
@@ -35,5 +38,9 @@ public class Conf extends Frame{
         db.put("password", config.getString("database.password"));
 
         database = db;
+    }
+
+    public void getVault() {
+        vault = config.getBoolean("vault");
     }
 }

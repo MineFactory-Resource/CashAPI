@@ -19,12 +19,20 @@ repositories {
     maven {
         url = 'https://repo.skriptlang.org/releases'
     }
+    maven {
+        url = 'https://jitpack.io'
+    }
 }
 
 dependencies {
     compileOnly spigot("1.18.1-R0.1-SNAPSHOT")
+
+    // api
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly 'com.github.SkriptLang:Skript:2.6'
+    compileOnly "com.github.MilkBowl:VaultAPI:1.7"
+
+    // database
     implementation 'com.zaxxer:HikariCP:5.0.1'
     implementation 'org.mongodb:mongo-java-driver:3.12.10'
 }
@@ -51,7 +59,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 spigot {
-    softDepends = ['PlaceholderAPI', 'Skript']
+    softDepends = ['PlaceholderAPI', 'Skript', 'Vault']
     apiVersion '1.13'
     commands {
         캐시 {
