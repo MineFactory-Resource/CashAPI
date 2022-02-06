@@ -1,5 +1,8 @@
 package net.teamuni.cashmf;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+
 import java.util.*;
 
 import static net.teamuni.cashmf.CashMF.getDatabase;
@@ -46,6 +49,16 @@ public class Cash {
     public static Cash getCash(UUID uuid) {
         if (cashes.containsKey(uuid))
             return cashes.get(uuid);
+
+        return null;
+    }
+
+    public static Cash getCash(String playerName) {
+        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+            if (player.getName().equalsIgnoreCase(playerName)) {
+                return getCash(player.getUniqueId());
+            }
+        }
 
         return null;
     }

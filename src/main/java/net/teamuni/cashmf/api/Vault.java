@@ -3,7 +3,6 @@ package net.teamuni.cashmf.api;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.teamuni.cashmf.Cash;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.util.List;
@@ -19,11 +18,9 @@ public class Vault implements Economy {
     // 플레이어 잔액 조회
     @Override
     public double getBalance(String playerName) {
-        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-            if (p.getName().equalsIgnoreCase(playerName)) {
-                return getBalance(p);
-            }
-        }
+        Cash cash = Cash.getCash(playerName);
+        if (cash != null)
+            return cash.getCash();
 
         return 0;
     }
@@ -48,13 +45,14 @@ public class Vault implements Economy {
     }
 
     // 플레이어 잔액 추가
-   @Override
+    @Override
     public EconomyResponse depositPlayer(String playerName, double amount) {
-        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-            if (p.getName().equalsIgnoreCase(playerName)) {
-                return depositPlayer(p, amount);
-            }
+        Cash cash = Cash.getCash(playerName);
+        if (cash != null) {
+            cash.addCash((int) amount);
+            return new EconomyResponse(amount, cash.getCash(), EconomyResponse.ResponseType.SUCCESS, "");
         }
+
         return new EconomyResponse(amount, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "");
     }
 
@@ -82,11 +80,12 @@ public class Vault implements Economy {
     // 플레이어 잔액 차감
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
-        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-            if (p.getName().equalsIgnoreCase(playerName)) {
-                return withdrawPlayer(p, amount);
-            }
+        Cash cash = Cash.getCash(playerName);
+        if (cash != null) {
+            cash.addCash((int) -amount);
+            return new EconomyResponse(amount, cash.getCash(), EconomyResponse.ResponseType.SUCCESS, "");
         }
+
         return new EconomyResponse(amount, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "");
     }
 

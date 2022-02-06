@@ -50,25 +50,7 @@ public class CashExecutor implements CommandExecutor {
                 if (sender instanceof Player && args[1].equalsIgnoreCase(sender.getName())) {
                     look(sender);
                 } else {
-                    try {
-                        OfflinePlayer player = null;
-                        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-                            if (args[1].equalsIgnoreCase(p.getName())) {
-                                player = p;
-                                break;
-                            }
-                        }
-
-                        if (player == null) {
-                            sender.sendMessage(getMessageConf().getMessage("exist_player"));
-                            return true;
-                        }
-                            look(sender, player);
-
-                        // 플레이어의 정보를 불러올 수 없는 경우
-                    } catch (NullPointerException e) {
-                        sender.sendMessage(getMessageConf().getMessage("exist_player"));
-                    }
+                    look(sender, args[1]);
                 }
             }
 
@@ -124,13 +106,13 @@ public class CashExecutor implements CommandExecutor {
         }
     }
 
-    private void look (CommandSender sender, OfflinePlayer player) {
-        Cash cash = Cash.getCash(player.getUniqueId());
+    private void look (CommandSender sender, String playerName) {
+        Cash cash = Cash.getCash(playerName);
         // 플레이어를 확인했을 경우
         if (cash != null) {
             int point = cash.getCash();
             sender.sendMessage(getMessageConf().getMessage("look_cash")
-                    .replace("%player%", player.getName())
+                    .replace("%player%", Bukkit.getOfflinePlayer(cash.getUUID()).getName())
                     .replace("%cash%", String.valueOf(point))
             );
         // 플레이어를 확인할 수 없는 경우
@@ -234,15 +216,7 @@ public class CashExecutor implements CommandExecutor {
                     return;
                 }
 
-                OfflinePlayer player = null;
-                for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
-                    if (args[1].equalsIgnoreCase(p.getName())) {
-                        player = p;
-                        break;
-                    }
-                }
-
-                Cash target = Cash.getCash(player.getUniqueId());
+                Cash target = Cash.getCash(args[1]);
                 if (target == null) {
                     throw new NullPointerException();
                 }
