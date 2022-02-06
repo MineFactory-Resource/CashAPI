@@ -11,7 +11,7 @@ public class Conf extends Frame{
     }
 
     @Override
-    public void load() {
+    protected void load() {
         super.load();
 
         getDatabase();
@@ -19,12 +19,12 @@ public class Conf extends Frame{
         getVault();
     }
 
-    public void getDatabase() {
+    private void getDatabase() {
         HashMap<String, String> db = new HashMap<>();
 
         db.put("type", config.getString("database.type").toLowerCase());
 
-        // yaml일 경우 아래 정보가 필요 없으므로 리턴
+        // yaml 방식일 경우 아래 정보가 필요 없으므로 리턴
         if (db.get("type").equals("yaml")) {
             database = db;
             return;
@@ -40,7 +40,7 @@ public class Conf extends Frame{
         database = db;
     }
 
-    public void getVault() {
+    private void getVault() {
         vault = config.getBoolean("vault");
     }
 }

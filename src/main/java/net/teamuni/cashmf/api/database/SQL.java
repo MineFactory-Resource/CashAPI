@@ -7,9 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import net.teamuni.cashmf.Cash;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -45,7 +43,7 @@ public class SQL implements Database {
     }
 
     // 테이블이 존재하지 않을 경우 생성
-    public void checkTable() {
+    private void checkTable() {
         try (Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(CREATE);
