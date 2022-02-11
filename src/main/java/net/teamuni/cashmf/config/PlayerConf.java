@@ -40,7 +40,7 @@ public class PlayerConf extends Frame implements Database {
     }
 
     // 플레이어의 캐시정보를 player.conf 파일에서 불러오기
-    public void getPlayers() {
+    private void getPlayers() {
         // Cash 데이터 초기화
         Cash.cashes = new HashMap<>();
 

@@ -11,7 +11,7 @@ public class MessageConf extends Frame{
     }
 
     @Override
-    public void load() {
+    protected void load() {
         super.load();
 
         getText();
