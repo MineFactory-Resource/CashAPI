@@ -59,6 +59,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 spigot {
+    name = 'CashMF'
     softDepends = ['PlaceholderAPI', 'Skript', 'Vault']
     apiVersion '1.13'
     commands {

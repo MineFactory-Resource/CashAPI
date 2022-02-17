@@ -38,11 +38,15 @@ public class Cash {
 
     // cash 값 더하기
     public void addCash(int add) {
+        int before = cash;
         cash += add;
 
         // 플레이어의 캐시가 0보다 적어질 경우 0으로 설정
         if (cash < 0)
             cash = 0;
+
+        CashEvent cashEvent = new CashEvent(uuid, before, cash);
+        Bukkit.getPluginManager().callEvent(cashEvent);
     }
 
     // 해당 uuid의 Cash 정보 가져오기
