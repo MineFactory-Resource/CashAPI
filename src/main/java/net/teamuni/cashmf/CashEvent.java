@@ -11,13 +11,21 @@ public class CashEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final UUID playerUUID;
-    public final int before;
-    public final int after;
+    private final int before;
+    private final int after;
 
     public CashEvent(UUID playerUUID, int before, int after) {
         this.playerUUID = playerUUID;
         this.before = before;
         this.after = after;
+    }
+
+    public int getBefore() {
+        return before;
+    }
+
+    public int getAfter() {
+        return after;
     }
 
     public UUID getPlayerUUID() {
