@@ -74,6 +74,14 @@ config.yml에서 vault 설정을 통해 Vault 플러그인의 economy 재화로 
 설정하는 방법은 config.yml 사용 방법 참조
 
 ----
+CashMF 라이브러리
+-----------
+CashMF 플러그인을 라이브러리로 사용할 경우, plugins.yml에서 depend 설정을 해야합니다.
+```yaml
+depend:
+  - CashMF
+```
+----
 API 사용 방법
 -----------
 CashMF 플러그인을 라이브러리로 사용할 경우, CashAPI 클래스로 간단하게 cash 값을 조절할 수 있습니다.
@@ -116,6 +124,27 @@ public class Example {
 
         // 캐시 초기화
         CashAPI.reset(playerName);
+    }
+}
+```
+----
+CashEvent 사용 방법
+-----------
+CashMF 플러그인에는 자체 Event가 존재하며, 캐시가 변동될때, 플레이어의 uuid와 변동 전 값, 변동 후 값이 기록됩니다.  
+CashMF 플러그인을 라이브러리로 사용할 경우, CashEvent 클래스를 통해 값을 가져올 수 있습니다.  
+```java
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import net.teamuni.cashmf.CashEvent;
+
+import java.util.UUID;
+
+public class Example implements Listener {
+    @EventHandler
+    public void onCashEvent(CashEvent e) {
+        UUID uuid = e.getPlayerUUID();
+        int after = e.after;
+        int before = e.before;
     }
 }
 ```
