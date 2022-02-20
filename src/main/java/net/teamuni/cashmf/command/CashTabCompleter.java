@@ -16,15 +16,15 @@ public class CashTabCompleter implements TabCompleter {
         List<String> completions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
         if (args.length == 1) {
-            if (sender.hasPermission("cashmf.help"))
+            if (sender.hasPermission("cashapi.help"))
                 commands.add("도움말");
-            if (sender.hasPermission("cashmf.look"))
+            if (sender.hasPermission("cashapi.look"))
                 commands.add("확인");
-            if (sender.hasPermission("cashmf.pay"))
+            if (sender.hasPermission("cashapi.pay"))
                 commands.add("보내기");
-            if (sender.hasPermission("cashmf.add"))
+            if (sender.hasPermission("cashapi.add"))
                 commands.add("지급");
-            if (sender.hasPermission("cashmf.sub"))
+            if (sender.hasPermission("cashapi.sub"))
                 commands.add("차감");
             StringUtil.copyPartialMatches(args[0], commands, completions);
         }

@@ -59,32 +59,32 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 spigot {
-    name = 'CashMF'
+    name = 'CashAPI'
     softDepends = ['PlaceholderAPI', 'Skript', 'Vault']
     apiVersion '1.13'
     commands {
         캐시 {
             usage '/<command>'
-            permission 'cashmf.cash'
+            permission 'cashapi.cash'
         }
     }
     permissions {
-        'cashmf.cash' {
+        'cashapi.cash' {
             defaults 'true'
         }
-        'cashmf.look' {
+        'cashapi.look' {
             defaults 'true'
         }
-        'cashmf.help' {
+        'cashapi.help' {
             defaults 'true'
         }
-        'cashmf.pay' {
+        'cashapi.pay' {
             defaults 'true'
         }
-        'cashmf.add' {
+        'cashapi.add' {
             defaults 'op'
         }
-        'cashmf.sub' {
+        'cashapi.sub' {
             defaults 'op'
         }
     }
