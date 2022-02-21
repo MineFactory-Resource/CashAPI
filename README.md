@@ -60,11 +60,11 @@ PlaceHolderAPI와 함께 사용 중에 PlaceHolderAPI 플러그인에서 `%CashA
 Skript 지원 정보
 -----------
 CashAPI 플러그인은 Skript와 연동하여 사용하실 수 있습니다.   
-Skript와 함께 사용 중에 Skript 플러그인에서 `%player's cashapi%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
+Skript와 함께 사용 중에 Skript 플러그인에서 `%player's cashapi%` 또는 `%player's cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
 또한 스크립트를 통해 플레이어의 캐시 값을 조정할 수 있습니다.  
-`add 숫자 to player's cashapi` - 플레이어의 캐시를 숫자만큼 추가  
-`remove 숫자 from player's cashapi` - 플레이어의 캐시를 숫자만큼 차감  
-`set player's cashapi to 숫자` - 플레이어의 캐시를 숫자로 설정
+`add 숫자 to player's cashapi` or `add 숫자 to player's cash` - 플레이어의 캐시를 숫자만큼 추가  
+`remove 숫자 from player's cashapi` or `remove 숫자 from player's cash` - 플레이어의 캐시를 숫자만큼 차감  
+`set player's cashapi to 숫자` or `set player's cash to 숫자` - 플레이어의 캐시를 숫자로 설정
 
 
 ----
