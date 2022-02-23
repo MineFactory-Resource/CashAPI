@@ -14,8 +14,8 @@ public class CashExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // /캐시 명령어를 입력한 경우
         if (args.length==0) {
-            // cashmf.cash 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.cash")) {
+            // cashapi.cash 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.cash")) {
                  sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -24,8 +24,8 @@ public class CashExecutor implements CommandExecutor {
 
         // /캐시 도움말 명령어를 입력한 경우
         } else if (args[0].equals("도움말")) {
-            // cashmf.help 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.help")) {
+            // cashapi.help 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.help")) {
                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -33,8 +33,8 @@ public class CashExecutor implements CommandExecutor {
 
         // /캐시 확인 (<플레이어>) 명령어를 입력한 경우
         } else if (args[0].equals("확인")) {
-            // cashmf.look 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.look")) {
+            // cashapi.look 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.look")) {
                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -54,8 +54,8 @@ public class CashExecutor implements CommandExecutor {
 
         // /캐시 보내기 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("보내기")) {
-            // cashmf.pay 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.pay")) {
+            // cashapi.pay 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.pay")) {
                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -64,8 +64,8 @@ public class CashExecutor implements CommandExecutor {
 
         // /캐시 지급 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("지급")) {
-            // cashmf.add 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.add")) {
+            // cashapi.add 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.add")) {
                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -74,8 +74,8 @@ public class CashExecutor implements CommandExecutor {
 
         // /캐시 차감 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("차감")) {
-            // cashmf.sub 권한이 없을 경우
-            if (!sender.hasPermission("cashmf.sub")) {
+            // cashapi.sub 권한이 없을 경우
+            if (!sender.hasPermission("cashapi.sub")) {
                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
@@ -125,11 +125,11 @@ public class CashExecutor implements CommandExecutor {
         sender.sendMessage(getMessageConf().getMessage("cash_pay"));
 
         // 만약 관리자 명령어 권한이 있을 경우
-        if (sender.hasPermission("cashmf.add") || sender.hasPermission("cashmf.sub"))
+        if (sender.hasPermission("cashapi.add") || sender.hasPermission("cashapi.sub"))
             sender.sendMessage("");
-        if (sender.hasPermission("cashmf.add"))
+        if (sender.hasPermission("cashapi.add"))
             sender.sendMessage(getMessageConf().getMessage("cash_add"));
-        if (sender.hasPermission("cashmf.sub"))
+        if (sender.hasPermission("cashapi.sub"))
             sender.sendMessage(getMessageConf().getMessage("cash_sub"));
     }
 

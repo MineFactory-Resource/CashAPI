@@ -11,12 +11,12 @@ import javax.annotation.Nullable;
 
 public class ExprCash extends SimplePropertyExpression<Player, Number> {
     static {
-        register(ExprCash.class, Number.class, "cashmf", "player");
+        register(ExprCash.class, Number.class, "cash[api]", "player");
     }
 
     @Override
     protected String getPropertyName() {
-        return "cashmf";
+        return "cash[api]";
     }
 
     @Override

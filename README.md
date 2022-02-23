@@ -1,4 +1,4 @@
-CashMF
+CashAPI
 =======
 ----
 플러그인 소개
@@ -8,7 +8,7 @@ CashMF
 ----
 플러그인 적용 방법
 -----------
-1. [release](https://github.com/MineFactory-Resource/CashMF/releases) 항목에서 최신 버전의 플러그인 파일을 다운로드
+1. [release](https://github.com/MineFactory-Resource/CashAPI/releases) 항목에서 최신 버전의 플러그인 파일을 다운로드
 2. 서버 속 plugins 폴더에 다운로드 받은 *.jar 파일을 넣기
 
 ----
@@ -36,7 +36,7 @@ config.yml 사용 방법
         address: "localhost"
         port: "3306"
         database_name: ""
-        table: "CashMF"
+        table: "CashAPI"
         username: ""
         password: ""
     ```
@@ -53,18 +53,18 @@ config.yml 사용 방법
 ----
 PlaceHolderAPI 지원 정보
 -----------
-CashMF 플러그인은 PlaceHolderAPI와 연동하여 사용하실 수 있습니다.  
-PlaceHolderAPI와 함께 사용 중에 PlaceHolderAPI 플러그인에서 `%CashMF_cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
+CashAPI 플러그인은 PlaceHolderAPI와 연동하여 사용하실 수 있습니다.  
+PlaceHolderAPI와 함께 사용 중에 PlaceHolderAPI 플러그인에서 `%CashAPI_cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
 
 ----
 Skript 지원 정보
 -----------
-CashMF 플러그인은 Skript와 연동하여 사용하실 수 있습니다.   
-Skript와 함께 사용 중에 Skript 플러그인에서 `%player's cashmf%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
+CashAPI 플러그인은 Skript와 연동하여 사용하실 수 있습니다.   
+Skript와 함께 사용 중에 Skript 플러그인에서 `%player's cashapi%` 또는 `%player's cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
 또한 스크립트를 통해 플레이어의 캐시 값을 조정할 수 있습니다.  
-`add 숫자 to player's cashmf` - 플레이어의 캐시를 숫자만큼 추가  
-`remove 숫자 from player's cashmf` - 플레이어의 캐시를 숫자만큼 차감  
-`set player's cashmf to 숫자` - 플레이어의 캐시를 숫자로 설정
+`add 숫자 to player's cashapi` or `add 숫자 to player's cash` - 플레이어의 캐시를 숫자만큼 추가  
+`remove 숫자 from player's cashapi` or `remove 숫자 from player's cash` - 플레이어의 캐시를 숫자만큼 차감  
+`set player's cashapi to 숫자` or `set player's cash to 숫자` - 플레이어의 캐시를 숫자로 설정
 
 
 ----
@@ -74,17 +74,17 @@ config.yml에서 vault 설정을 통해 Vault 플러그인의 economy 재화로 
 설정하는 방법은 config.yml 사용 방법 참조
 
 ----
-CashMF 라이브러리
+CashAPI 라이브러리
 -----------
-CashMF 플러그인을 라이브러리로 사용할 경우, plugins.yml에서 depend 설정을 해야합니다.
+CashAPI 플러그인을 라이브러리로 사용할 경우, plugins.yml에서 depend 설정을 해야합니다.
 ```yaml
 depend:
-  - CashMF
+  - CashAPI
 ```
 ----
 API 사용 방법
 -----------
-CashMF 플러그인을 라이브러리로 사용할 경우, CashAPI 클래스로 간단하게 cash 값을 조절할 수 있습니다.
+CashAPI 플러그인을 라이브러리로 사용할 경우, CashAPI 클래스로 간단하게 cash 값을 조절할 수 있습니다.
 ```java
 import net.teamuni.cashmf.api.CashAPI;
 import org.bukkit.OfflinePlayer;
@@ -130,8 +130,8 @@ public class Example {
 ----
 CashEvent 사용 방법
 -----------
-CashMF 플러그인에는 자체 Event가 존재하며, 캐시가 변동될때, 플레이어의 uuid와 변동 전 값, 변동 후 값이 기록됩니다.  
-CashMF 플러그인을 라이브러리로 사용할 경우, CashEvent 클래스를 통해 값을 가져올 수 있습니다.  
+CashAPI 플러그인에는 자체 Event가 존재하며, 캐시가 변동될때, 플레이어의 uuid와 변동 전 값, 변동 후 값이 기록됩니다.  
+CashAPI 플러그인을 라이브러리로 사용할 경우, CashEvent 클래스를 통해 값을 가져올 수 있습니다.  
 ```java
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
