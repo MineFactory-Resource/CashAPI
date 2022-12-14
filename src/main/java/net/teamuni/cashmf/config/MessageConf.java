@@ -4,8 +4,9 @@ import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 
-public class MessageConf extends Frame{
+public class MessageConf extends Frame {
     private HashMap<String, String> messages;
+
     public MessageConf() {
         super("messages");
     }
@@ -21,7 +22,7 @@ public class MessageConf extends Frame{
     private void getText() {
         HashMap<String, String> messages = new HashMap<>();
         for (String s : config.getKeys(true)) {
-            messages.put(s, ChatColor.translateAlternateColorCodes('&',config.getString(s)));
+            messages.put(s, ChatColor.translateAlternateColorCodes('&', config.getString(s)));
         }
 
         this.messages = messages;

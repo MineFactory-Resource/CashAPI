@@ -3,12 +3,13 @@ package net.teamuni.cashmf.config;
 import net.teamuni.cashmf.Cash;
 import net.teamuni.cashmf.api.database.Database;
 
-import static net.teamuni.cashmf.CashMF.getInstance;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+
+import static net.teamuni.cashmf.CashMF.getInstance;
 
 public class PlayerConf extends Frame implements Database {
     public PlayerConf() {
@@ -25,7 +26,7 @@ public class PlayerConf extends Frame implements Database {
     // 플레이어의 캐시 정보를 player.conf 파일에 저장
     @Override
     public void save() {
-        for (Cash cash: Cash.cashes.values()) {
+        for (Cash cash : Cash.cashes.values()) {
             config.set(cash.getUUID().toString(), cash.getCash());
         }
 

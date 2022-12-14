@@ -45,11 +45,11 @@ public class ExprCash extends SimplePropertyExpression<Player, Number> {
             case REMOVE:
                 mod = -1;
             case ADD:
-                amount = ((Number)delta[0]).intValue();
+                amount = ((Number) delta[0]).intValue();
                 cash.addCash(mod * amount);
                 break;
             case SET:
-                amount = ((Number)delta[0]).intValue();
+                amount = ((Number) delta[0]).intValue();
                 cash.addCash(amount - cash.getCash());
                 break;
             case RESET:

@@ -84,7 +84,7 @@ public class CashAPI {
             return false;
 
         int balance = cash.getCash();
-        cash.addCash(amount-balance);
+        cash.addCash(amount - balance);
         return true;
     }
 

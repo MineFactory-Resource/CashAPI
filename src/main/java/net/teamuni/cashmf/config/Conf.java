@@ -2,7 +2,7 @@ package net.teamuni.cashmf.config;
 
 import java.util.HashMap;
 
-public class Conf extends Frame{
+public class Conf extends Frame {
     public HashMap<String, String> database;
     public boolean vault;
 

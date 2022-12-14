@@ -1,6 +1,5 @@
 package net.teamuni.cashmf.command;
 
-import static net.teamuni.cashmf.CashMF.getMessageConf;
 import net.teamuni.cashmf.Cash;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -9,20 +8,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static net.teamuni.cashmf.CashMF.getMessageConf;
+
 public class CashExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // /캐시 명령어를 입력한 경우
-        if (args.length==0) {
+        if (args.length == 0) {
             // cashapi.cash 권한이 없을 경우
             if (!sender.hasPermission("cashapi.cash")) {
-                 sender.sendMessage(getMessageConf().getMessage("no_perm"));
+                sender.sendMessage(getMessageConf().getMessage("no_perm"));
                 return true;
             }
             look(sender);
             sender.sendMessage(getMessageConf().getMessage("details_ex"));
 
-        // /캐시 도움말 명령어를 입력한 경우
+            // /캐시 도움말 명령어를 입력한 경우
         } else if (args[0].equals("도움말")) {
             // cashapi.help 권한이 없을 경우
             if (!sender.hasPermission("cashapi.help")) {
@@ -31,7 +32,7 @@ public class CashExecutor implements CommandExecutor {
             }
             help(sender);
 
-        // /캐시 확인 (<플레이어>) 명령어를 입력한 경우
+            // /캐시 확인 (<플레이어>) 명령어를 입력한 경우
         } else if (args[0].equals("확인")) {
             // cashapi.look 권한이 없을 경우
             if (!sender.hasPermission("cashapi.look")) {
@@ -43,7 +44,7 @@ public class CashExecutor implements CommandExecutor {
             if (args.length == 1) {
                 look(sender);
 
-            // /캐시 확인 <플레이어>
+                // /캐시 확인 <플레이어>
             } else {
                 if (sender instanceof Player && args[1].equalsIgnoreCase(sender.getName())) {
                     look(sender);
@@ -52,7 +53,7 @@ public class CashExecutor implements CommandExecutor {
                 }
             }
 
-        // /캐시 보내기 <플레이어> <수량> 명령어를 입력한 경우
+            // /캐시 보내기 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("보내기")) {
             // cashapi.pay 권한이 없을 경우
             if (!sender.hasPermission("cashapi.pay")) {
@@ -62,7 +63,7 @@ public class CashExecutor implements CommandExecutor {
 
             check(sender, args, 0);
 
-        // /캐시 지급 <플레이어> <수량> 명령어를 입력한 경우
+            // /캐시 지급 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("지급")) {
             // cashapi.add 권한이 없을 경우
             if (!sender.hasPermission("cashapi.add")) {
@@ -72,7 +73,7 @@ public class CashExecutor implements CommandExecutor {
 
             check(sender, args, 1);
 
-        // /캐시 차감 <플레이어> <수량> 명령어를 입력한 경우
+            // /캐시 차감 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("차감")) {
             // cashapi.sub 권한이 없을 경우
             if (!sender.hasPermission("cashapi.sub")) {
@@ -90,7 +91,7 @@ public class CashExecutor implements CommandExecutor {
     private void look(CommandSender sender) {
         // 플레이어가 자신의 캐시를 확인할 경우
         if (sender instanceof Player) {
-            Player player = (Player)sender;
+            Player player = (Player) sender;
             Cash cash = Cash.getCash(player.getUniqueId());
 
             int point = cash.getCash();
@@ -98,13 +99,13 @@ public class CashExecutor implements CommandExecutor {
                     .replace("%player%", player.getName())
                     .replace("%cash%", String.valueOf(point))
             );
-        // 플레이어가 아닌 경우
+            // 플레이어가 아닌 경우
         } else {
             sender.sendMessage(getMessageConf().getMessage("use_console"));
         }
     }
 
-    private void look (CommandSender sender, String playerName) {
+    private void look(CommandSender sender, String playerName) {
         Cash cash = Cash.getCash(playerName);
         // 플레이어를 확인했을 경우
         if (cash != null) {
@@ -113,7 +114,7 @@ public class CashExecutor implements CommandExecutor {
                     .replace("%player%", Bukkit.getOfflinePlayer(cash.getUUID()).getName())
                     .replace("%cash%", String.valueOf(point))
             );
-        // 플레이어를 확인할 수 없는 경우
+            // 플레이어를 확인할 수 없는 경우
         } else {
             sender.sendMessage(getMessageConf().getMessage("exist_player"));
         }
@@ -142,7 +143,7 @@ public class CashExecutor implements CommandExecutor {
         }
 
         // 사용자의 데이터 불러오기
-        Cash player1 = Cash.getCash(((Player)sender).getUniqueId());
+        Cash player1 = Cash.getCash(((Player) sender).getUniqueId());
 
         // 보내는 대상이 본인일 경우
         if (player1.getUUID().equals(player2.getUUID())) {
@@ -203,7 +204,7 @@ public class CashExecutor implements CommandExecutor {
         if (args.length < 3) {
             sender.sendMessage(getMessageConf().getMessage("exist_cmd"));
 
-        // 제대로 입력했을 경우
+            // 제대로 입력했을 경우
         } else {
             try {
                 int amount = Integer.parseInt(args[2]);
@@ -230,11 +231,11 @@ public class CashExecutor implements CommandExecutor {
                         edit(sender, target, amount, 1);
                 }
 
-            // 숫자가 잘못됐을 경우
+                // 숫자가 잘못됐을 경우
             } catch (NumberFormatException e) {
                 sender.sendMessage(getMessageConf().getMessage("natural_num"));
 
-            // 플레이어의 정보를 불러올 수 없는 경우
+                // 플레이어의 정보를 불러올 수 없는 경우
             } catch (NullPointerException e) {
                 sender.sendMessage(getMessageConf().getMessage("exist_player"));
             }
