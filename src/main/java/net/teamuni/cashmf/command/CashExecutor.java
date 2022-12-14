@@ -2,7 +2,6 @@ package net.teamuni.cashmf.command;
 
 import net.teamuni.cashmf.Cash;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,16 +53,6 @@ public class CashExecutor implements CommandExecutor {
             }
 
             // /캐시 보내기 <플레이어> <수량> 명령어를 입력한 경우
-        } else if (args[0].equals("보내기")) {
-            // cashapi.pay 권한이 없을 경우
-            if (!sender.hasPermission("cashapi.pay")) {
-                sender.sendMessage(getMessageConf().getMessage("no_perm"));
-                return true;
-            }
-
-            check(sender, args, 0);
-
-            // /캐시 지급 <플레이어> <수량> 명령어를 입력한 경우
         } else if (args[0].equals("지급")) {
             // cashapi.add 권한이 없을 경우
             if (!sender.hasPermission("cashapi.add")) {
@@ -123,7 +112,6 @@ public class CashExecutor implements CommandExecutor {
     // 캐시 명령어 확인
     private void help(CommandSender sender) {
         sender.sendMessage(getMessageConf().getMessage("cash_look"));
-        sender.sendMessage(getMessageConf().getMessage("cash_pay"));
 
         // 만약 관리자 명령어 권한이 있을 경우
         if (sender.hasPermission("cashapi.add") || sender.hasPermission("cashapi.sub"))
@@ -132,48 +120,6 @@ public class CashExecutor implements CommandExecutor {
             sender.sendMessage(getMessageConf().getMessage("cash_add"));
         if (sender.hasPermission("cashapi.sub"))
             sender.sendMessage(getMessageConf().getMessage("cash_sub"));
-    }
-
-    // 다른 플레이어한테 캐시 보내기
-    private void pay(CommandSender sender, Cash player2, int amount) {
-        // 명령어를 입력한 대상이 플레이어가 아닐 경우
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(getMessageConf().getMessage("use_console"));
-            return;
-        }
-
-        // 사용자의 데이터 불러오기
-        Cash player1 = Cash.getCash(((Player) sender).getUniqueId());
-
-        // 보내는 대상이 본인일 경우
-        if (player1.getUUID().equals(player2.getUUID())) {
-            sender.sendMessage(getMessageConf().getMessage("pay_self"));
-            return;
-        }
-
-        // 플레이어의 소지 캐시가 보내려는 수량보다 적을 경우
-        if (player1.getCash() < amount) {
-            sender.sendMessage(getMessageConf().getMessage("lack_cash"));
-            return;
-        }
-
-        OfflinePlayer p2 = Bukkit.getOfflinePlayer(player2.getUUID());
-        // 플레이어의 캐시를 차감
-        player1.addCash(-amount);
-        sender.sendMessage(getMessageConf().getMessage("send_cash")
-                .replace("%player%", p2.getName())
-                .replace("%amount%", String.valueOf(amount))
-        );
-
-        // 대상에게 차감된 캐시만큼 전송
-        player2.addCash(amount);
-        // 플레이어가 온라인일 경우
-        if (p2.isOnline()) {
-            p2.getPlayer().sendMessage(getMessageConf().getMessage("receive_cash")
-                    .replace("%player%", sender.getName())
-                    .replace("%amount%", String.valueOf(amount))
-            );
-        }
     }
 
     // 플레이어에게 캐시 지급하기
@@ -221,9 +167,6 @@ public class CashExecutor implements CommandExecutor {
                 }
 
                 switch (type) {
-                    case 0:
-                        pay(sender, target, amount);
-                        break;
                     case 1:
                         edit(sender, target, amount, 0);
                         break;
