@@ -20,6 +20,10 @@ public class CashEvent extends Event {
         this.after = after;
     }
 
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
     public int getBefore() {
         return before;
     }
@@ -30,10 +34,6 @@ public class CashEvent extends Event {
 
     public UUID getPlayerUUID() {
         return playerUUID;
-    }
-
-    public static HandlerList getHandlerList() {
-        return HANDLERS;
     }
 
     @NotNull

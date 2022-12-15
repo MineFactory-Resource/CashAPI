@@ -3,11 +3,11 @@ package net.teamuni.cashmf;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import net.milkbowl.vault.economy.Economy;
+import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.api.Vault;
 import net.teamuni.cashmf.api.database.Database;
 import net.teamuni.cashmf.api.database.MongoDB;
 import net.teamuni.cashmf.api.database.SQL;
-import net.teamuni.cashmf.api.Placeholder;
 import net.teamuni.cashmf.command.CashExecutor;
 import net.teamuni.cashmf.command.CashTabCompleter;
 import net.teamuni.cashmf.config.Conf;
@@ -28,6 +28,22 @@ public class CashMF extends JavaPlugin {
     private static Database database;
 
     private SkriptAddon addon;
+
+    public static CashMF getInstance() {
+        return instance;
+    }
+
+    public static MessageConf getMessageConf() {
+        return messageConf;
+    }
+
+    public static Conf getConf() {
+        return conf;
+    }
+
+    public static Database getDatabase() {
+        return database;
+    }
 
     @Override
     public void onEnable() {
@@ -86,22 +102,6 @@ public class CashMF extends JavaPlugin {
     @Override
     public void onDisable() {
         Cash.save();
-    }
-
-    public static CashMF getInstance() {
-        return instance;
-    }
-
-    public static MessageConf getMessageConf() {
-        return messageConf;
-    }
-
-    public static Conf getConf() {
-        return conf;
-    }
-
-    public static Database getDatabase() {
-        return database;
     }
 
     public SkriptAddon getAddonInstnace() {

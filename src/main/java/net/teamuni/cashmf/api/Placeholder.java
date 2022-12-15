@@ -23,7 +23,7 @@ public class Placeholder extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
-        if(params.equalsIgnoreCase("cash")){
+        if (params.equalsIgnoreCase("cash")) {
             Cash cash = Cash.getCash(player.getUniqueId());
             if (cash != null)
                 return String.valueOf(cash.getCash());

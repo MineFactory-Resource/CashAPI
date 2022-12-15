@@ -1,16 +1,17 @@
 package net.teamuni.cashmf.config;
 
-import static net.teamuni.cashmf.CashMF.getInstance;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
+import static net.teamuni.cashmf.CashMF.getInstance;
+
 public class Frame {
+    private final String name;
     protected File configFile;
     protected FileConfiguration config;
 
-    private final String name;
     public Frame(String name) {
         this.name = name;
         load();

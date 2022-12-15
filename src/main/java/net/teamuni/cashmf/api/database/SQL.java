@@ -1,15 +1,22 @@
 package net.teamuni.cashmf.api.database;
 
-import static net.teamuni.cashmf.CashMF.getConf;
-import static net.teamuni.cashmf.CashMF.getInstance;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.teamuni.cashmf.Cash;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLInvalidAuthorizationSpecException;
+import java.sql.SQLNonTransientConnectionException;
+import java.sql.SQLSyntaxErrorException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import static net.teamuni.cashmf.CashMF.getConf;
+import static net.teamuni.cashmf.CashMF.getInstance;
 
 public class SQL implements Database {
     private final HikariDataSource ds;
@@ -57,7 +64,7 @@ public class SQL implements Database {
         } catch (SQLNonTransientConnectionException e) {
             getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -89,7 +96,7 @@ public class SQL implements Database {
         } catch (SQLNonTransientConnectionException e) {
             getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -103,7 +110,7 @@ public class SQL implements Database {
              Statement stmt = conn.createStatement();) {
 
             for (Cash cash : Cash.cashes.values()) {
-                    stmt.execute(String.format(UPSERT, cash.getUUID(), cash.getCash()));
+                stmt.execute(String.format(UPSERT, cash.getUUID(), cash.getCash()));
             }
 
         } catch (SQLSyntaxErrorException e) {
@@ -115,7 +122,7 @@ public class SQL implements Database {
         } catch (SQLNonTransientConnectionException e) {
             getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

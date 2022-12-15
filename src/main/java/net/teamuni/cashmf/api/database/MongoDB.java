@@ -1,8 +1,8 @@
 package net.teamuni.cashmf.api.database;
 
-import static net.teamuni.cashmf.CashMF.getConf;
-
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -10,8 +10,11 @@ import com.mongodb.client.model.UpdateOptions;
 import net.teamuni.cashmf.Cash;
 import org.bson.Document;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.regex.Pattern;
+
+import static net.teamuni.cashmf.CashMF.getConf;
 
 public class MongoDB implements Database {
     private final MongoClientURI uri;
@@ -24,7 +27,7 @@ public class MongoDB implements Database {
                 + getConf().database.get("database_name");
         uri = new MongoClientURI(url);
 
-         load();
+        load();
     }
 
     // 콜렉션에서 데이터 불러오기

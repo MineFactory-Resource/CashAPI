@@ -20,8 +20,6 @@ public class CashTabCompleter implements TabCompleter {
                 commands.add("도움말");
             if (sender.hasPermission("cashapi.look"))
                 commands.add("확인");
-            if (sender.hasPermission("cashapi.pay"))
-                commands.add("보내기");
             if (sender.hasPermission("cashapi.add"))
                 commands.add("지급");
             if (sender.hasPermission("cashapi.sub"))

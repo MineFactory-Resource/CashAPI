@@ -78,9 +78,6 @@ spigot {
         'cashapi.help' {
             defaults 'true'
         }
-        'cashapi.pay' {
-            defaults 'true'
-        }
         'cashapi.add' {
             defaults 'op'
         }
