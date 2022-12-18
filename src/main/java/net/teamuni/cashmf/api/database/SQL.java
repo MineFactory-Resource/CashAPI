@@ -2,126 +2,125 @@ package net.teamuni.cashmf.api.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import net.teamuni.cashmf.Cash;
+import net.teamuni.cashmf.CashMF;
+import net.teamuni.cashmf.data.Cash;
+import net.teamuni.cashmf.data.CashInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLInvalidAuthorizationSpecException;
-import java.sql.SQLNonTransientConnectionException;
-import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.UUID;
-import java.util.regex.Pattern;
-
-import static net.teamuni.cashmf.CashMF.getConf;
-import static net.teamuni.cashmf.CashMF.getInstance;
 
 public class SQL implements Database {
     private final HikariDataSource ds;
+    private final CashMF main;
 
-    private final String CREATE;
-    private final String SELECT;
-    private final String UPSERT;
-
-    public SQL() {
+    public SQL(CashMF instance) {
+        this.main = instance;
         HikariConfig config = new HikariConfig();
 
-        String url = "jdbc:" + getConf().database.get("type") + "://"
-                + getConf().database.get("address") + ":"
-                + getConf().database.get("port") + "/"
-                + getConf().database.get("database_name") + "?characterEncoding=utf8&useSSL=false";
+        String url = "jdbc:" + instance.getConf().getDbInfoMap().get("type") + "://"
+                + instance.getConf().getDbInfoMap().get("address") + ":"
+                + instance.getConf().getDbInfoMap().get("port") + "/"
+                + instance.getConf().getDbInfoMap().get("database_name") + "?characterEncoding=utf8&useSSL=false";
 
         config.setJdbcUrl(url);
-        config.setUsername(getConf().database.get("username"));
-        config.setPassword(getConf().database.get("password"));
+        config.setUsername(instance.getConf().getDbInfoMap().get("username"));
+        config.setPassword(instance.getConf().getDbInfoMap().get("password"));
 
         ds = new HikariDataSource(config);
 
-        CREATE = "CREATE TABLE IF NOT EXISTS `" + getConf().database.get("table") + "` ("
-                + "`uuid` VARCHAR(36) PRIMARY KEY,"
-                + "`cash` MEDIUMINT UNSIGNED NOT NULL"
-                + ");";
-        SELECT = "SELECT * FROM `" + getConf().database.get("table") + "`;";
-        UPSERT = "INSERT INTO `" + getConf().database.get("table") + "` (`uuid`, `cash`) VALUES ('%1$s', '%2$s') ON DUPLICATE KEY UPDATE `cash` = '%2$s';";
-
-        load();
+        try {
+            initTable();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // 테이블이 존재하지 않을 경우 생성
-    private void checkTable() {
+    private void initTable() throws SQLException {
         try (Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement()) {
-            stmt.execute(CREATE);
-
-        } catch (SQLSyntaxErrorException e) {
-            getInstance().getLogger().warning("존재하지 않는 데이터베이스입니다.");
-
-        } catch (SQLInvalidAuthorizationSpecException e) {
-            getInstance().getLogger().warning("데이터베이스 로그인에 실패했습니다.");
-
-        } catch (SQLNonTransientConnectionException e) {
-            getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            String query = "CREATE TABLE IF NOT EXISTS " + main.getConf().getDbInfoMap().get("table")
+                    + "(uuid VARCHAR(36) PRIMARY KEY, cash MEDIUMINT, cumulative_cash MEDIUMINT);";
+            stmt.execute(query);
         }
     }
 
     // 테이블에서 데이터 불러오기
     @Override
-    public void load() {
-        // Cash 데이터 초기화
-        Cash.cashes = new HashMap<>();
+    public Cash load(UUID uuid) {
+        try {
+            if (hasAccount(uuid)) {
+                try (Connection connection = this.ds.getConnection()) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("SELECT cash, cumulative_cash FROM ")
+                            .append(main.getConf().getDbInfoMap().get("table"))
+                            .append(" WHERE uuid = '")
+                            .append(uuid)
+                            .append("'");
 
-        checkTable();
-
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SELECT)) {
-            while (rs.next()) {
-                // 잘못된 uuid 형식일 경우 무시
-                if (!Pattern.matches(Cash.UUID_PATTERN, rs.getString("uuid")))
-                    continue;
-
-                new Cash(UUID.fromString(rs.getString("uuid")), rs.getInt("cash"));
+                    try (Statement statement = connection.createStatement()) {
+                        ResultSet result = statement.executeQuery(builder.toString());
+                        if (result.next()) {
+                            return new Cash(uuid, new CashInfo(result.getLong(1), result.getLong(2)));
+                        }
+                    }
+                }
             }
-        } catch (SQLSyntaxErrorException e) {
-            getInstance().getLogger().warning("존재하지 않는 데이터베이스입니다.");
-
-        } catch (SQLInvalidAuthorizationSpecException e) {
-            getInstance().getLogger().warning("데이터베이스 로그인에 실패했습니다.");
-
-        } catch (SQLNonTransientConnectionException e) {
-            getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return new Cash(uuid, new CashInfo(0, 0));
+    }
+
+    @Override
+    public boolean hasAccount(UUID uuid) {
+        try {
+            try (Connection connection = this.ds.getConnection()) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("SELECT uuid FROM ")
+                        .append(main.getConf().getDbInfoMap().get("table"))
+                        .append(" WHERE uuid = '")
+                        .append(uuid)
+                        .append("'");
+
+                try (Statement statement = connection.createStatement()) {
+                    ResultSet result = statement.executeQuery(builder.toString());
+                    return result.next();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // 테이블에 데이터 저장
     @Override
-    public void save() {
-        checkTable();
+    public void save(Cash data) {
+        try {
+            try (Connection connection = this.ds.getConnection()) {
+                StringBuilder builder = new StringBuilder();
+                builder.append("INSERT INTO ")
+                        .append(main.getConf().getDbInfoMap().get("table"))
+                        .append(" (uuid, cash, cumulative_cash) VALUE ('")
+                        .append(data.getUuid())
+                        .append("', ")
+                        .append(data.getInfo().cash())
+                        .append(", ")
+                        .append(data.getInfo().cumulativeCash())
+                        .append(") ON DUPLICATE KEY UPDATE ")
+                        .append("cash = ")
+                        .append(data.getInfo().cash())
+                        .append(", cumulative_cash = ")
+                        .append(data.getInfo().cumulativeCash());
 
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
-
-            for (Cash cash : Cash.cashes.values()) {
-                stmt.execute(String.format(UPSERT, cash.getUUID(), cash.getCash()));
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate(builder.toString());
+                }
             }
-
-        } catch (SQLSyntaxErrorException e) {
-            getInstance().getLogger().warning("존재하지 않는 데이터베이스입니다.");
-
-        } catch (SQLInvalidAuthorizationSpecException e) {
-            getInstance().getLogger().warning("데이터베이스 로그인에 실패했습니다.");
-
-        } catch (SQLNonTransientConnectionException e) {
-            getInstance().getLogger().warning("아이피나 포트가 잘못되었습니다.");
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
