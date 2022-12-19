@@ -83,7 +83,7 @@ public class CashExecutor implements CommandExecutor {
                                 return false;
                             }
                             cashManager.edit(target, CashManager.EditType.ADD, Long.parseLong(args[2]));
-                            messageConf.translate((Player) target, messageMap.get("add_cash")
+                            messageConf.translate(player, messageMap.get("add_cash")
                                             , "%player%", target.getName()
                                             , "%amount%", df.format(Long.parseLong(args[2])))
                                     .forEach(player::sendMessage);
@@ -94,7 +94,7 @@ public class CashExecutor implements CommandExecutor {
                                 return false;
                             }
                             cashManager.edit(target, CashManager.EditType.SUB, Long.parseLong(args[2]));
-                            messageConf.translate((Player) target, messageMap.get("sub_cash")
+                            messageConf.translate(player, messageMap.get("sub_cash")
                                             , "%player%", target.getName()
                                             , "%amount%", df.format(Long.parseLong(args[2])))
                                     .forEach(player::sendMessage);
@@ -121,7 +121,7 @@ public class CashExecutor implements CommandExecutor {
                     return false;
                 }
                 cashManager.updateCumul(target, Long.parseLong(args[1]));
-                messageConf.translate((Player) target, messageMap.get("add_cumul_cash")
+                messageConf.translate(player, messageMap.get("add_cumul_cash")
                                 , "%player%", target.getName()
                                 , "%amount%", df.format(Long.parseLong(args[1])))
                         .forEach(player::sendMessage);
