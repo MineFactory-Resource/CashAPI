@@ -34,11 +34,13 @@ public class Placeholder extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         if (params.equalsIgnoreCase("cash")) {
-            Cash cash = main.getCashManager().getCache(player.getUniqueId());
+            Cash cash = main.getCashManager().getCacheIfPresent(player.getUniqueId());
+            if (cash == null) return "";
             return df.format(cash.getInfo().cash());
         }
         if (params.equalsIgnoreCase("cumulative_cash")) {
-            Cash cash = main.getCashManager().getCache(player.getUniqueId());
+            Cash cash = main.getCashManager().getCacheIfPresent(player.getUniqueId());
+            if (cash == null) return "";
             return df.format(cash.getInfo().cumulativeCash());
         }
         return null;
