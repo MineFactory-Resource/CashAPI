@@ -1,5 +1,6 @@
 package net.teamuni.cashmf;
 
+import net.teamuni.cashmf.data.Cash;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,10 @@ public class JoinAndQuit implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
-            main.getCashManager().getCache(e.getPlayer().getUniqueId());
+            Cash data = main.getCashManager().getCache(e.getPlayer().getUniqueId());
+            if (!main.getDatabase().hasAccount(e.getPlayer().getUniqueId())) {
+                main.getDatabase().save(data);
+            }
         });
     }
 
