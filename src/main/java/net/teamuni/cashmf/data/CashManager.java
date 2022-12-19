@@ -94,6 +94,10 @@ public class CashManager {
             }
             data.update(new CashInfo(newCash, data.getInfo().cumulativeCash()));
         }
+
+        if (!target.isOnline()) {
+            main.getDatabase().save(data);
+        }
     }
 
     public void updateCumul(OfflinePlayer player, long amount) {
@@ -101,6 +105,10 @@ public class CashManager {
         long cash = data.getInfo().cash();
         long cumulativeCash = data.getInfo().cumulativeCash();
         data.update(new CashInfo(cash, cumulativeCash + amount));
+
+        if (!player.isOnline()) {
+            main.getDatabase().save(data);
+        }
     }
 
     public enum EditType {
