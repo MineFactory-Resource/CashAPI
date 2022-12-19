@@ -12,10 +12,12 @@ commands:
 permissions:
   cashapi.cash:
     default: true
-  cashapi.look:
-    default: true
   cashapi.help:
     default: true
+  cashapi.look:
+    default: true
+  cashapi.seek:
+    default: op
   cashapi.add:
     default: op
   cashapi.sub:
