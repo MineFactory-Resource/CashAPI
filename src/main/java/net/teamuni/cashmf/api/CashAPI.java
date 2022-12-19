@@ -5,7 +5,6 @@ import net.teamuni.cashmf.data.Cash;
 import net.teamuni.cashmf.data.CashInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public class CashAPI {
     private static CashMF getInstance() {
@@ -14,8 +13,9 @@ public class CashAPI {
 
     // 금액 확인
     public static long balance(String playerName) {
-        Player player = Bukkit.getPlayer(playerName);
-        if (player == null || !getInstance().getDatabase().hasAccount(player.getUniqueId())) return 0;
+        OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (player == null) return 0;
+        if (!getInstance().getDatabase().hasAccount(player.getUniqueId())) return 0;
         Cash cash = getInstance().getCashManager().getCache(player.getUniqueId());
 
         return balance(cash);
@@ -35,8 +35,9 @@ public class CashAPI {
 
     // 금액 추가
     public static boolean add(String playerName, int amount) {
-        Player player = Bukkit.getPlayer(playerName);
-        if (player == null || !getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
+        OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (player == null) return false;
+        if (!getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
         Cash cash = getInstance().getCashManager().getCache(player.getUniqueId());
 
         return add(cash, amount);
@@ -61,8 +62,9 @@ public class CashAPI {
 
     // 금액 차감
     public static boolean sub(String playerName, int amount) {
-        Player player = Bukkit.getPlayer(playerName);
-        if (player == null || !getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
+        OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (player == null) return false;
+        if (!getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
         Cash cash = getInstance().getCashManager().getCache(player.getUniqueId());
 
         return sub(cash, amount);
@@ -87,8 +89,9 @@ public class CashAPI {
 
     // 금액 설정
     public static boolean set(String playerName, int amount) {
-        Player player = Bukkit.getPlayer(playerName);
-        if (player == null || !getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
+        OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (player == null) return false;
+        if (!getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
         Cash cash = getInstance().getCashManager().getCache(player.getUniqueId());
 
         return set(cash, amount);
@@ -116,8 +119,9 @@ public class CashAPI {
 
     // 금액 초기화
     public static boolean reset(String playerName) {
-        Player player = Bukkit.getPlayer(playerName);
-        if (player == null || !getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
+        OfflinePlayer player = Bukkit.getOfflinePlayerIfCached(playerName);
+        if (player == null) return false;
+        if (!getInstance().getDatabase().hasAccount(player.getUniqueId())) return false;
         Cash cash = getInstance().getCashManager().getCache(player.getUniqueId());
 
         return reset(cash);
