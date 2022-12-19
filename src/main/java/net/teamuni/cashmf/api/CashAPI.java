@@ -55,7 +55,7 @@ public class CashAPI {
         long newCash = oldCash + amount;
         long cumulativeCash = cash.getInfo().cumulativeCash();
 
-        cash.update(new CashInfo(newCash, cumulativeCash + amount));
+        cash.update(new CashInfo(newCash, cumulativeCash));
 
         return true;
     }
@@ -105,15 +105,10 @@ public class CashAPI {
 
     private static boolean set(Cash cash, long amount) {
         if (cash == null) return false;
-        long oldCash = cash.getInfo().cash();
-        long cumulativeCash;
+        long cumulativeCash = cash.getInfo().cumulativeCash();
 
-        if (amount > oldCash) {
-            cumulativeCash = cash.getInfo().cumulativeCash() + (amount - oldCash);
-        } else {
-            cumulativeCash = cash.getInfo().cumulativeCash();
-        }
         cash.update(new CashInfo(amount, cumulativeCash));
+
         return true;
     }
 

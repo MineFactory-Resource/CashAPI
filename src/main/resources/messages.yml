@@ -2,9 +2,13 @@ not_available_command: #명령어를 실행할 수 없을 때 출력되는 메�
   - ""
   - "&e[알림] &f명령어를 실행할 수 없습니다."
   - ""
-details_ex:
+cash_command_details:
   - ""
   - "&e[알림] &f자세한 명령어는 &e/캐시 도움말 &f명령어를 통해 확인하실 수 있습니다."
+  - ""
+cumul_cash_command_details:
+  - ""
+  - "&e[알림] &f누적후원처리 명령어는 &e/누적후원처리 [닉네임] [금액] &f명령어를 사용해주세요."
   - ""
 incorrect_player_name:
   - ""
@@ -23,13 +27,17 @@ cash_help:
 #변동된 캐시 값 가져오기 : %amount%
 add_cash:
   - ""
-  - "&d%player%&f님에게 &d%amount%캐시&f를 지급하였습니다."
+  - "&e[알림] &6%player%&f님에게 &a%amount% 캐시&f를 지급하였습니다."
   - ""
 sub_cash:
   - ""
-  - "&d%player%&f님에게서 &d%amount%캐시&f를 차감하였습니다."
+  - "&e[알림] &6%player%&f님에게서 &a%amount% 캐시&f를 차감하였습니다."
   - ""
 look_cash:
   - ""
-  - "&d%player%&f님이 보유 중인 캐시: &d%cash%캐시"
+  - "&e[알림] &6%player%&f님이 보유 중인 캐시: &a%cash% 캐시"
+  - ""
+add_cumul_cash:
+  - ""
+  - "&e[알림] &6%player%&f님의 누적후원금이 &a%amount% 캐시 &f증가하였습니다."
   - ""

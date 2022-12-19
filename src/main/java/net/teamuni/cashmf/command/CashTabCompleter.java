@@ -17,41 +17,50 @@ public class CashTabCompleter implements TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player player) {
             List<String> suggestions = new ArrayList<>();
+            if (command.getName().equals("캐시")) {
+                if (args.length == 1) {
+                    if (player.hasPermission("cashapi.help"))
+                        suggestions.add("도움말");
+                    if (player.hasPermission("cashapi.look"))
+                        suggestions.add("확인");
+                    if (player.hasPermission("cashapi.add"))
+                        suggestions.add("지급");
+                    if (player.hasPermission("cashapi.sub"))
+                        suggestions.add("차감");
+                }
+                switch (args[0]) {
+                    case "지급" -> {
+                        if (player.hasPermission("cashapi.add")) {
+                            if (args.length == 2) {
+                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
+                            }
+                        }
+                    }
+                    case "차감" -> {
+                        if (player.hasPermission("cashapi.sub")) {
+                            if (args.length == 2) {
+                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
+                            }
+                        }
+                    }
+                    case "확인" -> {
+                        if (player.hasPermission("cashapi.seek")) {
+                            if (args.length == 2) {
+                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
+                            }
+                        }
+                    }
+                }
+                return suggestions;
 
-            if (args.length == 1) {
-                if (player.hasPermission("cashapi.help"))
-                    suggestions.add("도움말");
-                if (player.hasPermission("cashapi.look"))
-                    suggestions.add("확인");
-                if (player.hasPermission("cashapi.add"))
-                    suggestions.add("지급");
-                if (player.hasPermission("cashapi.sub"))
-                    suggestions.add("차감");
+            } else if (command.getName().equals("누적후원처리")) {
+                if (player.hasPermission("cashapi.add")) {
+                    if (args.length == 1) {
+                        Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
+                    }
+                }
+                return suggestions;
             }
-            switch (args[0]) {
-                case "지급" -> {
-                    if (player.hasPermission("cashapi.add")) {
-                        if (args.length == 2) {
-                            Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                        }
-                    }
-                }
-                case "차감" -> {
-                    if (player.hasPermission("cashapi.sub")) {
-                        if (args.length == 2) {
-                            Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                        }
-                    }
-                }
-                case "확인" -> {
-                    if (player.hasPermission("cashapi.seek")) {
-                        if (args.length == 2) {
-                            Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                        }
-                    }
-                }
-            }
-            return suggestions;
         }
         return null;
     }

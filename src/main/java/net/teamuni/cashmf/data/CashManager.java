@@ -85,14 +85,7 @@ public class CashManager {
 
         if (type == EditType.ADD) {
             long newCash = oldCash + amount;
-            long cumulativeCash;
-
-            if (newCash > oldCash) {
-                cumulativeCash = data.getInfo().cumulativeCash() + amount;
-            } else {
-                cumulativeCash = data.getInfo().cumulativeCash();
-            }
-            data.update(new CashInfo(newCash, cumulativeCash));
+            data.update(new CashInfo(newCash, data.getInfo().cumulativeCash()));
 
         } else if (type == EditType.SUB) {
             long newCash = oldCash - amount;
@@ -101,6 +94,13 @@ public class CashManager {
             }
             data.update(new CashInfo(newCash, data.getInfo().cumulativeCash()));
         }
+    }
+
+    public void updateCumul(OfflinePlayer player, long amount) {
+        Cash data = main.getCashManager().getCache(player.getUniqueId());
+        long cash = data.getInfo().cash();
+        long cumulativeCash = data.getInfo().cumulativeCash();
+        data.update(new CashInfo(cash, cumulativeCash + amount));
     }
 
     public enum EditType {

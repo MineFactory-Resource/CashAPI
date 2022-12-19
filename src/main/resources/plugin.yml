@@ -9,6 +9,8 @@ libraries:
 commands:
   캐시:
     permission: cashapi.cash
+  누적후원처리:
+    permission: cashapi.add
 permissions:
   cashapi.cash:
     default: true
