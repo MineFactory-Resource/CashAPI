@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
 public class CashMF extends JavaPlugin {
-    private CashMF instance;
     private Conf conf;
     private MessageConf messageConf;
     private Database database;
@@ -23,8 +22,6 @@ public class CashMF extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.instance = this;
-
         // *.yml 파일 설정
         this.messageConf = new MessageConf();
         this.conf = new Conf();
