@@ -8,6 +8,7 @@ import com.google.common.cache.RemovalListeners;
 import net.teamuni.cashmf.CashMF;
 import net.teamuni.cashmf.api.database.Database;
 import net.teamuni.cashmf.config.MessageConf;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +97,9 @@ public class CashManager {
         }
 
         if (!target.isOnline()) {
-            main.getDatabase().save(data);
+            Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
+                main.getDatabase().save(data);
+            });
         }
     }
 
@@ -107,7 +110,9 @@ public class CashManager {
         data.update(new CashInfo(cash, cumulativeCash + amount));
 
         if (!player.isOnline()) {
-            main.getDatabase().save(data);
+            Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
+                main.getDatabase().save(data);
+            });
         }
     }
 
