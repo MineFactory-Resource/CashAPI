@@ -11,10 +11,10 @@ public class CashEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final UUID playerUUID;
-    private final int before;
-    private final int after;
+    private final long before;
+    private final long after;
 
-    public CashEvent(UUID playerUUID, int before, int after) {
+    public CashEvent(UUID playerUUID, long before, long after) {
         this.playerUUID = playerUUID;
         this.before = before;
         this.after = after;
@@ -24,11 +24,11 @@ public class CashEvent extends Event {
         return HANDLERS;
     }
 
-    public int getBefore() {
+    public long getBefore() {
         return before;
     }
 
-    public int getAfter() {
+    public long getAfter() {
         return after;
     }
 

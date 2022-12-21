@@ -1,0 +1,26 @@
+name: CashAPI
+version: '${version}'
+main: net.teamuni.cashmf.CashMF
+api-version: 1.19
+softdepend:
+  - PlaceholderAPI
+libraries:
+  - com.zaxxer:HikariCP:5.0.1
+commands:
+  캐시:
+    permission: cashapi.cash
+  누적후원처리:
+    permission: cashapi.add
+permissions:
+  cashapi.cash:
+    default: true
+  cashapi.help:
+    default: true
+  cashapi.look:
+    default: true
+  cashapi.seek:
+    default: op
+  cashapi.add:
+    default: op
+  cashapi.sub:
+    default: op

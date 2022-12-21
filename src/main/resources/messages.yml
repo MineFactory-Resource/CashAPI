@@ -1,16 +1,43 @@
-prefix: ""
-no_perm: "&c권한이 없습니다."
-exist_cmd: "&f잘못된 명령어입니다. &d/캐시 도움말"
-details_ex: "&f자세한 명령어는 &d/캐시 도움말 &f명령어 참고"
-exist_player: "&f지금 접속 중이지 않은 플레이어입니다."
-natural_num: "&f수량은 반드시 자연수여야 합니다."
-use_console: "&f콘솔로는 사용할 수 없는 명령어입니다."
-cash_look: "&d/캐시 확인 (플레이어) &f- 자신 또는 해당 플레이어의 보유 중인 캐시를 확인합니다."
-cash_add: "&d/캐시 지급 <플레이어> <수량> &f- 플레이어에게 캐시를 지급합니다."
-cash_sub: "&d/캐시 차감 <플레이어> <수량> &f- 플레이어의 캐시를 차감합니다."
-lack_cash: "&f캐시가 부족합니다."
-send_cash: "&d%player%&f님에게 &d%amount%캐시&f를 보냈습니다."
-receive_cash: "&d%player%&f님에게 &d%amount%캐시&f를 받았습니다."
-add_cash: "&d%player%&f님에게 &d%amount%캐시&f를 지급하였습니다."
-sub_cash: "&d%player%&f님에게서 &d%amount%캐시&f를 차감하였습니다."
-look_cash: "&d%player%&f님이 보유 중인 캐시: &d%cash%캐시"
+not_available_command: #명령어를 실행할 수 없을 때 출력되는 메시지입니다.
+  - ""
+  - "&e[알림] &f명령어를 실행할 수 없습니다."
+  - ""
+cash_command_details:
+  - ""
+  - "&e[알림] &f자세한 명령어는 &e/캐시 도움말 &f명령어를 통해 확인하실 수 있습니다."
+  - ""
+cumul_cash_command_details:
+  - ""
+  - "&e[알림] &f누적후원처리 명령어는 &e/누적후원처리 [닉네임] [금액] &f명령어를 사용해주세요."
+  - ""
+incorrect_player_name:
+  - ""
+  - "&e[알림] &f해당 플레이어는 접속 중이지 않은 플레이어이거나 존재하지 않는 플레이어입니다."
+  - ""
+invalid_syntax:
+  - ""
+  - "&e[알림] &f숫자가 들어가야 하는 자리에 문자가 들어갈 수 없습니다."
+  - ""
+cash_help:
+  - "&d/캐시 확인 (플레이어) &f- 자신 또는 해당 플레이어의 보유 중인 캐시를 확인합니다."
+  - "&d/캐시 지급 <플레이어> <수량> &f- 플레이어에게 캐시를 지급합니다."
+  - "&d/캐시 차감 <플레이어> <수량> &f- 플레이어의 캐시를 차감합니다."
+
+#플레이어 닉네임 가져오기 : %player%
+#변동된 캐시 값 가져오기 : %amount%
+add_cash:
+  - ""
+  - "&e[알림] &6%player%&f님에게 &a%amount% 캐시&f를 지급하였습니다."
+  - ""
+sub_cash:
+  - ""
+  - "&e[알림] &6%player%&f님에게서 &a%amount% 캐시&f를 차감하였습니다."
+  - ""
+look_cash:
+  - ""
+  - "&e[알림] &6%player%&f님이 보유 중인 캐시: &a%cash% 캐시"
+  - ""
+add_cumul_cash:
+  - ""
+  - "&e[알림] &6%player%&f님의 누적후원금이 &a%amount% 캐시 &f증가하였습니다."
+  - ""

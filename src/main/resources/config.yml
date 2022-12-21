@@ -1,6 +1,5 @@
 # Database 사용 여부
-# Database type: Yaml, MySQL, MariaDB, PostgreSQL, SQLite, MongoDB
-# yaml의 경우 players.yml 파일로 적용되며, mongodb의 경우 table에 collection 이름을 작성
+# Database type: Yaml, MySQL, MariaDB, PostgreSQL, SQLite
 
 database:
   type: "yaml"
@@ -10,8 +9,3 @@ database:
   table: "CashAPI"
   username: ""
   password: ""
-
-# Vault 플러그인 사용 여부
-# true로 할 경우 vault 플러그인의 경제 재화로 지정됩니다.
-# 기본: false
-vault: false

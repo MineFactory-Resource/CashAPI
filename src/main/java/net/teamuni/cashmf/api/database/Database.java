@@ -1,7 +1,11 @@
 package net.teamuni.cashmf.api.database;
 
-public interface Database {
-    void load();
+import net.teamuni.cashmf.data.Cash;
 
-    void save();
+import java.util.UUID;
+
+public interface Database {
+    Cash load(UUID uuid);
+    boolean hasAccount(UUID uuid);
+    void save(Cash data);
 }

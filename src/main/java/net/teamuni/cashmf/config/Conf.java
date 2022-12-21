@@ -1,10 +1,12 @@
 package net.teamuni.cashmf.config;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 
 public class Conf extends Frame {
-    public HashMap<String, String> database;
-    public boolean vault;
+    @Getter
+    public HashMap<String, String> dbInfoMap;
 
     public Conf() {
         super("config");
@@ -15,8 +17,6 @@ public class Conf extends Frame {
         super.load();
 
         getDatabase();
-
-        getVault();
     }
 
     private void getDatabase() {
@@ -26,7 +26,7 @@ public class Conf extends Frame {
 
         // yaml 방식일 경우 아래 정보가 필요 없으므로 리턴
         if (db.get("type").equals("yaml")) {
-            database = db;
+            this.dbInfoMap = db;
             return;
         }
 
@@ -37,10 +37,6 @@ public class Conf extends Frame {
         db.put("username", config.getString("database.username"));
         db.put("password", config.getString("database.password"));
 
-        database = db;
-    }
-
-    private void getVault() {
-        vault = config.getBoolean("vault");
+        this.dbInfoMap = db;
     }
 }
