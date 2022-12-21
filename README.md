@@ -19,21 +19,20 @@ messages.yml 사용 방법
 예시)
 
 ```yaml
-lack_cash: "&d캐시&f가 부족합니다."
+cash_command_details:
+   - ""
+   - "&e[알림] &f자세한 명령어는 &e/캐시 도움말 &f명령어를 통해 확인하실 수 있습니다."
+   - ""
 ```
 
 위와 같이 큰 따옴표 속 메세지를 변경할 경우, 플러그인의 메세지가 변경됩니다.
 
-파일 속 prefix 항목에 메세지를 넣을 경우, 플러그인 메세지에 접두사가 추가됩니다.  
-`"[캐시] "`와 같이 설정했을 경우 명령어를 사용할 권한이 없어 나타나는 메세지의 경우,
-`[캐시] &c권한이 없습니다.`로 적용됩니다.
-
 ----
 config.yml 사용 방법
 -----------
-해당 플러그인의 config.yml에는 두가지 설정이 존재합니다.
+해당 플러그인의 config.yml에서는 데이터베이스 설정을 할 수 있습니다.
 
-1. DataBase 설정
+- DataBase 설정
     ```yaml
     database:
         type: "yaml"
@@ -46,36 +45,11 @@ config.yml 사용 방법
     ```
    type 항목에서 저장 방식을 변경할 수 있습니다. (기본: yaml - players.yml)  
    `Yaml, MySQL, MariaDB, PostgreSQL, SQLite, MongoDB`
-
-
-2. Vault 설정
-    ```yaml
-    vault: false
-    ```
-   활성화(true)할 경우, Vault 플러그인의 economy 재화로 설정됩니다. (기본: false - 비활성화)
-
 ----
 PlaceHolderAPI 지원 정보
 -----------
 CashAPI 플러그인은 PlaceHolderAPI와 연동하여 사용하실 수 있습니다.  
 PlaceHolderAPI와 함께 사용 중에 PlaceHolderAPI 플러그인에서 `%CashAPI_cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
-
-----
-Skript 지원 정보
------------
-CashAPI 플러그인은 Skript와 연동하여 사용하실 수 있습니다.   
-Skript와 함께 사용 중에 Skript 플러그인에서 `%player's cashapi%` 또는 `%player's cash%` 플레이스홀더를 통해 캐시 정보를 불러올 수 있습니다.
-또한 스크립트를 통해 플레이어의 캐시 값을 조정할 수 있습니다.  
-`add 숫자 to player's cashapi` or `add 숫자 to player's cash` - 플레이어의 캐시를 숫자만큼 추가  
-`remove 숫자 from player's cashapi` or `remove 숫자 from player's cash` - 플레이어의 캐시를 숫자만큼 차감  
-`set player's cashapi to 숫자` or `set player's cash to 숫자` - 플레이어의 캐시를 숫자로 설정
-
-
-----
-vault 지원 정보
------------
-config.yml에서 vault 설정을 통해 Vault 플러그인의 economy 재화로 설정하실 수 있습니다.  
-설정하는 방법은 config.yml 사용 방법 참조
 
 ----
 CashAPI 라이브러리
