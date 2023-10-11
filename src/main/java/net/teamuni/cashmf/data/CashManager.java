@@ -5,9 +5,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalListeners;
+import java.text.DecimalFormat;
 import net.teamuni.cashmf.CashMF;
 import net.teamuni.cashmf.api.database.Database;
-import net.teamuni.cashmf.config.MessageConf;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -27,23 +27,25 @@ public class CashManager {
     public CashManager(CashMF instance) {
         this.main = instance;
         this.cache = CacheBuilder.newBuilder().removalListener(
-                        RemovalListeners.asynchronous((RemovalListener<UUID, Cash>) notify -> {
-                            Cash data = notify.getValue();
-                            Database database = instance.getDatabase();
-                            if (data == null | database == null) return;
-                            database.save(data);
-                        }, Executors.newFixedThreadPool(5)))
-                .build(new CacheLoader<>() {
-
-                    @Override
-                    public @NotNull Cash load(@NotNull UUID uuid) {
-                        Database database = instance.getDatabase();
-                        if (database == null) {
-                            return new Cash(uuid, new CashInfo(0, 0));
-                        }
-                        return database.load(uuid);
+                RemovalListeners.asynchronous((RemovalListener<UUID, Cash>) notify -> {
+                    Cash data = notify.getValue();
+                    Database database = instance.getDatabase();
+                    if (data == null | database == null) {
+                        return;
                     }
-                });
+                    database.save(data);
+                }, Executors.newFixedThreadPool(5)))
+            .build(new CacheLoader<>() {
+
+                @Override
+                public @NotNull Cash load(@NotNull UUID uuid) {
+                    Database database = instance.getDatabase();
+                    if (database == null) {
+                        return new Cash(uuid, new CashInfo(0, 0));
+                    }
+                    return database.load(uuid);
+                }
+            });
     }
 
     public void remove(Player player) {
@@ -66,40 +68,46 @@ public class CashManager {
         return this.cache.getIfPresent(uuid);
     }
 
-    public void look(Player player, OfflinePlayer target) {
-        if (target == null || !main.getDatabase().hasAccount(target.getUniqueId())) return;
-        MessageConf messageConf = main.getMessageConf();
-        Map<String, List<String>> messageMap = messageConf.getMessages();
-        Cash cash = main.getCashManager().getCache(target.getUniqueId());
-        long point = cash.getInfo().cash();
+    public void look(Player player, OfflinePlayer target, boolean isCumul) {
+        if (isInvalidPlayer(player)) {
+            return;
+        }
 
-        messageConf.translate((Player) target, messageMap.get("look_cash")
-                        , "%player%", target.getName()
-                        , "%cash%", String.valueOf(point))
-                .forEach(player::sendMessage);
+        DecimalFormat df = new DecimalFormat("###,###");
+        Map<String, List<String>> messageMap = main.getMessageConf().getMessages();
+        Cash cash = main.getCashManager().getCache(target.getUniqueId());
+        String msgKey = isCumul ? "look_cumul_cash" : "look_cash";
+        long point = isCumul ? cash.getInfo().cumulativeCash() : cash.getInfo().cash();
+
+        main.getMessageConf().translate(
+                (Player) target,
+                messageMap.get(msgKey),
+                "%player%", target.getName(),
+                "%cash%", df.format(point))
+            .forEach(player::sendMessage);
     }
 
     public void edit(OfflinePlayer target, EditType type, long amount) {
-        if (target == null || !main.getDatabase().hasAccount(target.getUniqueId())) return;
-        Cash data = main.getCashManager().getCache(target.getUniqueId());
-        long oldCash = data.getInfo().cash();
-
-        if (type == EditType.ADD) {
-            long newCash = oldCash + amount;
-            data.update(new CashInfo(newCash, data.getInfo().cumulativeCash()));
-
-        } else if (type == EditType.SUB) {
-            long newCash = oldCash - amount;
-            if (newCash < 0) {
-                newCash = 0;
-            }
-            data.update(new CashInfo(newCash, data.getInfo().cumulativeCash()));
+        if (isInvalidPlayer(target)) {
+            return;
         }
 
+        Cash data = main.getCashManager().getCache(target.getUniqueId());
+        long oldCash = data.getInfo().cash();
+        long newCash;
+
+        switch (type) {
+            case ADD -> newCash = oldCash + amount;
+            case SUB -> newCash = Math.max(0, oldCash - amount);
+            default -> {
+                return;
+            }
+        }
+
+        updateData(data, newCash);
+
         if (!target.isOnline()) {
-            Bukkit.getScheduler().runTaskAsynchronously(main, () -> {
-                main.getDatabase().save(data);
-            });
+            saveDataAsync(data);
         }
     }
 
@@ -114,6 +122,19 @@ public class CashManager {
                 main.getDatabase().save(data);
             });
         }
+    }
+
+    private boolean isInvalidPlayer(OfflinePlayer player) {
+        return player == null || !main.getDatabase().hasAccount(player.getUniqueId());
+    }
+
+    private void updateData(Cash data, long newCash) {
+        CashInfo updatedInfo = new CashInfo(newCash, data.getInfo().cumulativeCash());
+        data.update(updatedInfo);
+    }
+
+    private void saveDataAsync(Cash data) {
+        Bukkit.getScheduler().runTaskAsynchronously(main, () -> main.getDatabase().save(data));
     }
 
     public enum EditType {
