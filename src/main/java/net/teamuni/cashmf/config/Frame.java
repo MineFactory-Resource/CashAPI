@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class Frame {
+    private final CashMF main = CashMF.getPlugin(CashMF.class);
     private final String name;
     protected File configFile;
     protected FileConfiguration config;
@@ -18,7 +19,6 @@ public class Frame {
 
     // CashMF 폴더에서 *.yml 불러오기
     protected void load() {
-        CashMF main = CashMF.getPlugin(CashMF.class);
         // 만약 CashMF 폴더가 존재하지 않을 경우 생성
         if (!main.getDataFolder().exists()) {
             main.getDataFolder().mkdirs();
@@ -29,5 +29,12 @@ public class Frame {
         if (!configFile.exists())
             main.saveResource(name + ".yml", false);
         config = YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    public void reload() {
+        if (this.configFile == null) {
+            this.configFile = new File(main.getDataFolder(), name + ".yml");
+        }
+        this.config = YamlConfiguration.loadConfiguration(configFile);
     }
 }

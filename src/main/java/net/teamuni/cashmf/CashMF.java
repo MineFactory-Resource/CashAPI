@@ -40,10 +40,10 @@ public class CashMF extends JavaPlugin {
         // 명령어 설정
         CashExecutor commandExecutor = new CashExecutor(this);
         CashTabCompleter tabCompleter = new CashTabCompleter();
-        this.getCommand("캐시").setExecutor(commandExecutor);
-        this.getCommand("캐시").setTabCompleter(tabCompleter);
-        this.getCommand("누적후원처리").setExecutor(commandExecutor);
-        this.getCommand("누적후원처리").setTabCompleter(tabCompleter);
+        getCommand("캐시").setExecutor(commandExecutor);
+        getCommand("캐시").setTabCompleter(tabCompleter);
+        getCommand("누적후원처리").setExecutor(commandExecutor);
+        getCommand("누적후원처리").setTabCompleter(tabCompleter);
 
         // api 설정
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) { // PlaceholderAPI

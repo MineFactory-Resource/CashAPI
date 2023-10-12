@@ -14,53 +14,65 @@ import java.util.List;
 public class CashTabCompleter implements TabCompleter {
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            List<String> suggestions = new ArrayList<>();
-            if (command.getName().equals("캐시")) {
-                if (args.length == 1) {
-                    if (player.hasPermission("cashapi.help"))
-                        suggestions.add("도움말");
-                    if (player.hasPermission("cashapi.look"))
-                        suggestions.add("확인");
-                    if (player.hasPermission("cashapi.add"))
-                        suggestions.add("지급");
-                    if (player.hasPermission("cashapi.sub"))
-                        suggestions.add("차감");
-                }
-                switch (args[0]) {
-                    case "지급" -> {
-                        if (player.hasPermission("cashapi.add")) {
-                            if (args.length == 2) {
-                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                            }
-                        }
-                    }
-                    case "차감" -> {
-                        if (player.hasPermission("cashapi.sub")) {
-                            if (args.length == 2) {
-                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                            }
-                        }
-                    }
-                    case "확인" -> {
-                        if (player.hasPermission("cashapi.seek")) {
-                            if (args.length == 2) {
-                                Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
-                            }
-                        }
-                    }
-                }
-                return suggestions;
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender,
+        @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            return null;
+        }
 
-            } else if (command.getName().equals("누적후원처리")) {
-                if (player.hasPermission("cashapi.add")) {
-                    if (args.length == 1) {
-                        Bukkit.getOnlinePlayers().forEach(p -> suggestions.add(p.getName()));
+        if (!player.hasPermission("cashapi.manage")) {
+            return null;
+        }
+
+        List<String> suggestions = new ArrayList<>();
+
+        if (command.getName().equals("캐시")) {
+            switch (args.length) {
+                case 1 -> {
+                    suggestions.add("확인");
+                    suggestions.add("지급");
+                    suggestions.add("차감");
+                    suggestions.add("리로드");
+                }
+                case 2 -> {
+                    switch (args[0]) {
+                        case "지급", "차감", "확인" -> {
+                            Bukkit.getOnlinePlayers()
+                                .forEach(p -> suggestions.add(p.getName()));
+                        }
                     }
                 }
-                return suggestions;
+                case 3 -> {
+                    switch (args[0]) {
+                        case "지급", "차감" -> suggestions.add("금액");
+                    }
+                }
             }
+            return suggestions;
+
+        } else if (command.getName().equals("누적후원처리")) {
+            if (player.hasPermission("cashapi.manage")) {
+                switch (args.length) {
+                    case 1 -> {
+                        suggestions.add("증가");
+                        suggestions.add("감소");
+                    }
+                    case 2 -> {
+                        switch (args[0]) {
+                            case "증가", "감소" -> {
+                                Bukkit.getOnlinePlayers()
+                                    .forEach(p -> suggestions.add(p.getName()));
+                            }
+                        }
+                    }
+                    case 3 -> {
+                        switch (args[0]) {
+                            case "증가", "감소" -> suggestions.add("금액");
+                        }
+                    }
+                }
+            }
+            return suggestions;
         }
         return null;
     }
